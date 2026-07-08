@@ -144,16 +144,16 @@
     @apply font-sans;
   }
   h1 {
-    @apply text-6xl font-heading font-bold tracking-tight;
+    @apply text-6xl font-heading font-bold tracking-tight text-yellow-50;
   }
   h2 {
-    @apply text-4xl font-heading font-bold tracking-tight;
+    @apply text-4xl font-heading font-bold tracking-tight text-yellow-50;
   }
   h3 {
-    @apply text-2xl font-heading font-semibold tracking-tight;
+    @apply text-2xl font-heading font-semibold tracking-tight text-yellow-50;
   }
   h4 {
-    @apply text-xl font-heading font-semibold tracking-tight;
+    @apply text-xl font-heading font-semibold tracking-tight text-yellow-50;
   }
   h5 {
     @apply text-lg font-heading font-semibold uppercase tracking-[0.18em];
@@ -198,5 +198,34 @@
     to {
       transform: translateX(50%);
     }
+  }
+}
+
+@layer components {
+  .industries-item {
+    @apply opacity-0 translate-y-4 font-medium text-lg;
+  }
+
+  /* Scroll reveal — sections start hidden and animate in when they enter the viewport */
+  .reveal-section {
+    opacity: 0;
+    transform: translateY(2rem);
+    transition:
+      opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1),
+      transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-section.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Loading-screen progress bar */
+@keyframes load-bar {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
   }
 }

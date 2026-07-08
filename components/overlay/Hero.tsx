@@ -3,6 +3,7 @@
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Image from "next/image";
+import { useGSAP } from "@gsap/react";
 
 type HeroImageItemProps = {
   url: string;
@@ -10,14 +11,40 @@ type HeroImageItemProps = {
   id: string;
 };
 
+const FALLBACK_HERO_IMAGE = "/sample-hero.jpg";
+const MIN_ROW_IMAGE_COUNT = 6;
+
+function createPlaceholderItems(count: number): HeroImageItemProps[] {
+  return Array.from({ length: count }, () => ({
+    url: FALLBACK_HERO_IMAGE,
+    idToAnimate: "",
+    id: "",
+  }));
+}
+
+function buildRowItems(urls: string[], minItems: number): HeroImageItemProps[] {
+  if (!urls.length) {
+    return createPlaceholderItems(minItems);
+  }
+
+  return Array.from(
+    { length: Math.max(minItems, urls.length) },
+    (_, index) => ({
+      url: urls[index % urls.length],
+      idToAnimate: "",
+      id: "",
+    }),
+  );
+}
+
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
-  const [topImages, setTopImages] = useState<HeroImageItemProps[]>(
-    Array(6).fill({ url: "/sample-hero.jpg", idToAnimate: "", id: "" }),
+  const [topImages, setTopImages] = useState<HeroImageItemProps[]>(() =>
+    createPlaceholderItems(MIN_ROW_IMAGE_COUNT),
   );
-  const [bottomImages, setBottomImages] = useState<HeroImageItemProps[]>(
-    Array(6).fill({ url: "/sample-hero.jpg", idToAnimate: "", id: "" }),
+  const [bottomImages, setBottomImages] = useState<HeroImageItemProps[]>(() =>
+    createPlaceholderItems(MIN_ROW_IMAGE_COUNT),
   );
   const [idToAnimate, setIdToAnimate] = useState<string>("");
   const [visibleHeroImageIds, setVisibleHeroImageIds] = useState<string[]>([]);
@@ -29,6 +56,53 @@ export default function Hero() {
   const cycleTimeoutRef = useRef<number | null>(null);
 
   const scrollSpeed = 100;
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const loadHeroImages = async () => {
+      try {
+        const response = await fetch("/api/hero-images", {
+          signal: controller.signal,
+          cache: "no-store",
+        });
+
+        if (!response.ok) {
+          return;
+        }
+
+        const data = (await response.json()) as { images?: string[] };
+        const heroImages = Array.isArray(data.images)
+          ? data.images.filter((imagePath) => typeof imagePath === "string")
+          : [];
+
+        if (!heroImages.length) {
+          return;
+        }
+
+        const topRowUrls = heroImages.filter((_, index) => index % 2 === 0);
+        const bottomRowUrls = heroImages.filter((_, index) => index % 2 === 1);
+
+        setTopImages(buildRowItems(topRowUrls, MIN_ROW_IMAGE_COUNT));
+        setBottomImages(
+          buildRowItems(
+            bottomRowUrls.length ? bottomRowUrls : [...topRowUrls].reverse(),
+            MIN_ROW_IMAGE_COUNT,
+          ),
+        );
+      } catch (error) {
+        if ((error as Error).name === "AbortError") {
+          return;
+        }
+      }
+    };
+
+    loadHeroImages();
+
+    return () => {
+      controller.abort();
+    };
+  }, []);
 
   const scheduleCycle = () => {
     if (cycleScheduledRef.current || animationRunningRef.current) {
@@ -151,11 +225,11 @@ export default function Hero() {
   }, []);
 
   //Here i will describe how my animations should work
-  useEffect(() => {
+  useGSAP(() => {
+    const tl = gsap.timeline();
     if (!window || !trackRef.current) {
       return;
     }
-    const tl = gsap.timeline();
 
     // First name the company name visible
     tl.fromTo("#CompanyName", { width: 0 }, { width: 280, duration: 3 })
@@ -196,7 +270,6 @@ export default function Hero() {
       scrollTrigger: {
         trigger: "#heroSection",
         start: "top -20%",
-        scroller: "#homePage",
         end: "bottom center", // Continues progressing well after the header
         scrub: 1, // Ultra-smooth progression
         // markers: { startColor: "green", endColor: "red" },
@@ -208,13 +281,24 @@ export default function Hero() {
       ease: "power1.inOut",
       scrollTrigger: {
         trigger: "#heroSection",
-        scroller: "#homePage",
         start: "top -10%",
         end: "bottom center", // Continues progressing well after the header
         scrub: 1, // Ultra-smooth progression
       },
     });
-  }, []);
+
+    gsap.to(".industries-item", {
+      opacity: 1,
+      translateY: 0,
+      duration: 2,
+      ease: "power4.in",
+      scrollTrigger: {
+        trigger: "#industries-list",
+        start: "top 80%",
+      },
+      stagger: 1,
+    });
+  }, [trackRef.current]);
 
   return (
     <section
