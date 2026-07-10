@@ -4,23 +4,45 @@ import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { gsap } from "@/lib/gsap";
 import LanguageToggle from "./LanguageToggle";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
-  { label: "Industries", href: "/#industries" },
   { label: "About", href: "/about" },
   { label: "Contact Us", href: "/contact" },
   { label: "Privacy", href: "/privacy" },
 ];
 
+const INDUSTRY_LINKS = [
+  { label: "Complex", href: "/industries/complex" },
+  { label: "Fast Food", href: "/industries/fast-food" },
+  { label: "Music Production", href: "/industries/music-production" },
+];
+
 export default function NavBar() {
   const [open, setOpen] = useState(false);
+  const [industriesOpen, setIndustriesOpen] = useState(false);
+  const [mobileIndustriesOpen, setMobileIndustriesOpen] = useState(false);
+  const industriesRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const drawerLinksRef = useRef<HTMLDivElement>(null);
   const isHome = pathname === "/";
+
+  // Close industries dropdown when clicking outside
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        industriesRef.current &&
+        !industriesRef.current.contains(e.target as Node)
+      ) {
+        setIndustriesOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   // Stagger-animate links on drawer open; reset on close
   useEffect(() => {
@@ -55,6 +77,8 @@ export default function NavBar() {
     return pathname === href || pathname.startsWith(href + "/");
   }
 
+  const isIndustryActive = INDUSTRY_LINKS.some((l) => isActive(l.href));
+
   return (
     <>
       {/*  Fixed top bar  */}
@@ -83,7 +107,56 @@ export default function NavBar() {
                 isHome ? "relative top-[100vh]" : ""
               }`}
             >
-              {NAV_LINKS.map((link) => (
+              {/* Home link */}
+              <Link
+                href="/"
+                className={`text-sm font-medium transition-colors ${
+                  isActive("/")
+                    ? "text-primary"
+                    : "text-white/75 hover:text-primary"
+                }`}
+              >
+                Home
+              </Link>
+
+              {/* Industries dropdown */}
+              <div ref={industriesRef} className="relative">
+                <button
+                  onClick={() => setIndustriesOpen((v) => !v)}
+                  className={`flex items-center gap-1 text-sm font-medium transition-colors ${
+                    isIndustryActive
+                      ? "text-primary"
+                      : "text-white/75 hover:text-primary"
+                  }`}
+                >
+                  Industries
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-200 ${industriesOpen ? "rotate-180" : ""}`}
+                  />
+                </button>
+                {industriesOpen && (
+                  <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 min-w-42.5 bg-black/95 border border-white/10 rounded-xl overflow-hidden shadow-xl">
+                    {INDUSTRY_LINKS.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        onClick={() => setIndustriesOpen(false)}
+                        className={`block px-4 py-2.5 text-sm transition-colors ${
+                          isActive(link.href)
+                            ? "text-primary bg-white/5"
+                            : "text-white/75 hover:text-primary hover:bg-white/5"
+                        }`}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Remaining links */}
+              {NAV_LINKS.filter((l) => l.href !== "/").map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
@@ -125,7 +198,64 @@ export default function NavBar() {
         }`}
       >
         <div ref={drawerLinksRef} className="flex flex-col pt-28 px-8">
-          {NAV_LINKS.map((link) => (
+          {/* Home link */}
+          <Link
+            href="/"
+            className={`mobile-nav-link text-base font-semibold py-4 border-b border-white/8 transition-colors ${
+              isActive("/")
+                ? "text-primary"
+                : "text-white/75 hover:text-primary"
+            }`}
+            style={{ opacity: 0, transform: "translateX(-28px)" }}
+            onClick={() => setOpen(false)}
+          >
+            Home
+          </Link>
+
+          {/* Industries expandable */}
+          <div
+            className="mobile-nav-link border-b border-white/8"
+            style={{ opacity: 0, transform: "translateX(-28px)" }}
+          >
+            <button
+              onClick={() => setMobileIndustriesOpen((v) => !v)}
+              className={`w-full flex items-center justify-between text-base font-semibold py-4 transition-colors ${
+                isIndustryActive
+                  ? "text-primary"
+                  : "text-white/75 hover:text-primary"
+              }`}
+            >
+              Industries
+              <ChevronDown
+                size={16}
+                className={`transition-transform duration-200 ${mobileIndustriesOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+            {mobileIndustriesOpen && (
+              <div className="pb-2 flex flex-col gap-1 pl-4">
+                {INDUSTRY_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className={`text-sm font-medium py-2 transition-colors ${
+                      isActive(link.href)
+                        ? "text-primary"
+                        : "text-white/60 hover:text-primary"
+                    }`}
+                    onClick={() => {
+                      setOpen(false);
+                      setMobileIndustriesOpen(false);
+                    }}
+                  >
+                    {link.label}
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Remaining links */}
+          {NAV_LINKS.filter((l) => l.href !== "/").map((link) => (
             <Link
               key={link.href}
               href={link.href}
