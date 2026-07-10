@@ -448,7 +448,11 @@ function HeroScrollImageItem({ idToAnimate, url, id }: HeroImageItemProps) {
           src={url}
           alt="hero image"
           fill
-          className="object-cover rounded-md"
+          sizes="(max-width: 768px) 50vw, 25vw"
+          className="object-cover rounded-md opacity-0 transition-opacity duration-500"
+          onLoad={(e) => {
+            (e.currentTarget as HTMLImageElement).classList.remove("opacity-0");
+          }}
         />
       </div>
       <div className=" absolute inset-0 bg-black/30 rounded-md hover:opacity-0"></div>
@@ -468,9 +472,11 @@ function HeroImageSrollBox(props: {
     : isBottom
       ? "marquee-right 65s linear infinite"
       : undefined;
-  const animationDelay = duration
-    ? `-${Math.floor(Date.now() / 1000) % duration}s`
-    : undefined;
+  // Computed once on mount so re-renders never reset the animation mid-scroll
+  const animationDelayRef = useRef(
+    duration ? `-${Math.floor(Date.now() / 1000) % duration}s` : undefined,
+  );
+  const animationDelay = animationDelayRef.current;
 
   return (
     <>
