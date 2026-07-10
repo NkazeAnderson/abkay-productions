@@ -13,6 +13,8 @@ type HeroImageItemProps = {
 
 const FALLBACK_HERO_IMAGE = "/sample-hero.jpg";
 const MIN_ROW_IMAGE_COUNT = 6;
+const MOBILE_MAX_UNIQUE_IMAGES = 6;
+const DESKTOP_MAX_UNIQUE_IMAGES = 10;
 
 function createPlaceholderItems(count: number): HeroImageItemProps[] {
   return Array.from({ length: count }, () => ({
@@ -40,6 +42,7 @@ function buildRowItems(urls: string[], minItems: number): HeroImageItemProps[] {
 export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const [topImages, setTopImages] = useState<HeroImageItemProps[]>(() =>
     createPlaceholderItems(MIN_ROW_IMAGE_COUNT),
   );
@@ -56,7 +59,17 @@ export default function Hero() {
   const cycleTimeoutRef = useRef<number | null>(null);
   const hasPlayedIntroRef = useRef(false);
 
-  const scrollSpeed = 100;
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+    const updateIsMobile = () => setIsMobile(mediaQuery.matches);
+
+    updateIsMobile();
+    mediaQuery.addEventListener("change", updateIsMobile);
+
+    return () => {
+      mediaQuery.removeEventListener("change", updateIsMobile);
+    };
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -65,7 +78,7 @@ export default function Hero() {
       try {
         const response = await fetch("/api/hero-images", {
           signal: controller.signal,
-          cache: "no-store",
+          cache: "force-cache",
         });
 
         if (!response.ok) {
@@ -81,8 +94,18 @@ export default function Hero() {
           return;
         }
 
-        const topRowUrls = heroImages.filter((_, index) => index % 2 === 0);
-        const bottomRowUrls = heroImages.filter((_, index) => index % 2 === 1);
+        const isMobile = window.matchMedia("(max-width: 768px)").matches;
+        const maxUniqueImages = isMobile
+          ? MOBILE_MAX_UNIQUE_IMAGES
+          : DESKTOP_MAX_UNIQUE_IMAGES;
+        const optimizedHeroImages = heroImages.slice(0, maxUniqueImages);
+
+        const topRowUrls = optimizedHeroImages.filter(
+          (_, index) => index % 2 === 0,
+        );
+        const bottomRowUrls = optimizedHeroImages.filter(
+          (_, index) => index % 2 === 1,
+        );
 
         setTopImages(buildRowItems(topRowUrls, MIN_ROW_IMAGE_COUNT));
         setBottomImages(
@@ -106,6 +129,10 @@ export default function Hero() {
   }, []);
 
   const scheduleCycle = () => {
+    if (isMobile) {
+      return;
+    }
+
     if (cycleScheduledRef.current || animationRunningRef.current) {
       return;
     }
@@ -127,6 +154,10 @@ export default function Hero() {
   };
 
   const startCycle = () => {
+    if (isMobile) {
+      return;
+    }
+
     if (animationRunningRef.current) {
       return;
     }
@@ -172,7 +203,7 @@ export default function Hero() {
   };
 
   useEffect(() => {
-    if (!containerRef.current) {
+    if (isMobile || !containerRef.current) {
       return;
     }
 
@@ -210,11 +241,15 @@ export default function Hero() {
     return () => {
       observer.disconnect();
     };
-  }, []);
+  }, [isMobile]);
 
   useEffect(() => {
+    if (isMobile) {
+      return;
+    }
+
     scheduleCycle();
-  }, [visibleHeroImageIds]);
+  }, [isMobile, visibleHeroImageIds]);
 
   useEffect(() => {
     return () => {
@@ -335,22 +370,24 @@ export default function Hero() {
       >
         <div className="flex-1 " ref={trackRef}>
           <HeroImageSrollBox
+            simple={isMobile}
             className="hero-scroll-top relative"
             images={[...topImages, ...topImages].map((item, index) => ({
               ...item,
               id: "top-row-" + index,
-              idToAnimate,
+              idToAnimate: isMobile ? "" : idToAnimate,
             }))}
           />
         </div>
         <HeroPulseBar />
         <div className="flex-1 ">
           <HeroImageSrollBox
+            simple={isMobile}
             className="pl-10 hero-scroll-bottom"
             images={[...bottomImages, ...bottomImages].map((item, index) => ({
               ...item,
               id: "bottom-row-" + index,
-              idToAnimate,
+              idToAnimate: isMobile ? "" : idToAnimate,
             }))}
           />
         </div>
@@ -363,8 +400,6 @@ function HeroScrollImageItem({ idToAnimate, url, id }: HeroImageItemProps) {
   const imageHolderRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const originalWidth = useRef(0);
-  const [isHovered, setIsHovered] = useState(false);
-  const [isAnimating, setIsAnimating] = useState(false);
 
   function createAnimateTimeline() {
     if (!imageHolderRef.current || !imageRef.current) {
@@ -439,8 +474,6 @@ function HeroScrollImageItem({ idToAnimate, url, id }: HeroImageItemProps) {
       id={id}
       ref={imageHolderRef}
       className=" relative h-full aspect-video border-yellow-200 rounded-md hover:scale-105 duration-300 "
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
     >
       <div className="  w-full h-full  overflow-hidden">
         <Image
@@ -448,7 +481,9 @@ function HeroScrollImageItem({ idToAnimate, url, id }: HeroImageItemProps) {
           src={url}
           alt="hero image"
           fill
-          sizes="(max-width: 768px) 50vw, 25vw"
+          sizes="(max-width: 640px) 72vw, (max-width: 1024px) 42vw, 26vw"
+          quality={60}
+          loading="lazy"
           className="object-cover rounded-md opacity-0 transition-opacity duration-500"
           onLoad={(e) => {
             (e.currentTarget as HTMLImageElement).classList.remove("opacity-0");
@@ -463,6 +498,7 @@ function HeroScrollImageItem({ idToAnimate, url, id }: HeroImageItemProps) {
 function HeroImageSrollBox(props: {
   className?: string;
   images: HeroImageItemProps[];
+  simple?: boolean;
 }) {
   const isTop = props.className?.includes("hero-scroll-top");
   const isBottom = props.className?.includes("hero-scroll-bottom");
@@ -488,9 +524,13 @@ function HeroImageSrollBox(props: {
             : { minWidth: "max-content" }
         }
       >
-        {props.images.map((item, i) => (
-          <HeroScrollImageItem key={i} {...item} />
-        ))}
+        {props.images.map((item, i) =>
+          props.simple ? (
+            <HeroSimpleScrollImageItem key={i} id={item.id} url={item.url} />
+          ) : (
+            <HeroScrollImageItem key={i} {...item} />
+          ),
+        )}
       </div>
       <style jsx global>{`
         @keyframes marquee-left {
@@ -511,6 +551,25 @@ function HeroImageSrollBox(props: {
         }
       `}</style>
     </>
+  );
+}
+
+function HeroSimpleScrollImageItem({ url, id }: { url: string; id: string }) {
+  return (
+    <div id={id} className="relative h-full aspect-video rounded-md">
+      <div className="w-full h-full overflow-hidden rounded-md">
+        <Image
+          src={url}
+          alt="hero image"
+          fill
+          sizes="(max-width: 640px) 72vw, (max-width: 1024px) 42vw, 26vw"
+          quality={60}
+          loading="lazy"
+          className="object-cover rounded-md"
+        />
+      </div>
+      <div className="absolute inset-0 bg-black/25 rounded-md" />
+    </div>
   );
 }
 

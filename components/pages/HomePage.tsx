@@ -91,39 +91,42 @@ type GalleryItem = {
 
 const GALLERY_ITEMS: GalleryItem[] = [
   {
-    src: "/hero/husien-bisky-FiKgMC_5p8o-unsplash.jpg",
+    src: "/hero/husien-bisky-FiKgMC_5p8o-unsplash.webp",
     alt: "Event highlight 1",
     large: true,
   },
-  { src: "/hero/foto-dial-LEHNmIJ467k-unsplash.jpg", alt: "Event highlight 2" },
   {
-    src: "/hero/Gemini_Generated_Image_geh0qbgeh0qbgeh0.png",
+    src: "/hero/foto-dial-LEHNmIJ467k-unsplash.webp",
+    alt: "Event highlight 2",
+  },
+  {
+    src: "/hero/Gemini_Generated_Image_geh0qbgeh0qbgeh0.webp",
     alt: "Event highlight 3",
   },
   {
-    src: "/hero/Gemini_Generated_Image_j29l5zj29l5zj29l.png",
+    src: "/hero/Gemini_Generated_Image_j29l5zj29l5zj29l.webp",
     alt: "Event highlight 4",
   },
   {
-    src: "/hero/Gemini_Generated_Image_7mb7qv7mb7qv7mb7.png",
+    src: "/hero/Gemini_Generated_Image_7mb7qv7mb7qv7mb7.webp",
     alt: "Event highlight 5",
   },
-  { src: "/hero/IMG_0510.png", alt: "Event highlight 6" },
+  { src: "/hero/IMG_0510.webp", alt: "Event highlight 6" },
   {
-    src: "/hero/keith-banks-bHfz5aRBDrg-unsplash.jpg",
+    src: "/hero/keith-banks-bHfz5aRBDrg-unsplash.webp",
     alt: "Event highlight 7",
     large: true,
   },
   {
-    src: "/hero/Gemini_Generated_Image_xjap3oxjap3oxjap.png",
+    src: "/hero/Gemini_Generated_Image_xjap3oxjap3oxjap.webp",
     alt: "Event highlight 8",
   },
   {
-    src: "/hero/stu-moffat-kuc_jHYoQEA-unsplash.jpg",
+    src: "/hero/stu-moffat-kuc_jHYoQEA-unsplash.webp",
     alt: "Event highlight 9",
   },
   {
-    src: "/hero/Gemini_Generated_Image_jysryvjysryvjysr.png",
+    src: "/hero/Gemini_Generated_Image_jysryvjysryvjysr.webp",
     alt: "Event highlight 10",
   },
 ];
