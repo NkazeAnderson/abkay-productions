@@ -2,6 +2,7 @@
 
 import { Sky } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
 
 import AnimatedAssets from "./AnimatedAssets";
 
@@ -32,6 +33,17 @@ function DayLighting() {
 }
 
 export default function Scene() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // React's `muted` JSX prop is not reflected to the DOM attribute in all browsers.
+  // Setting it imperatively ensures Firefox respects it and allows autoplay.
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true;
+      videoRef.current.play().catch(() => {});
+    }
+  }, []);
+
   return (
     <div className="fixed inset-0 z-0 overflow-hidden">
       {/* Sky: base background */}
@@ -49,14 +61,16 @@ export default function Scene() {
       {/* Video: bottom layer above sky (top-right, 80% viewport size with frame padding) */}
       <div className="pointer-events-none absolute right-0 top-0 z-10 h-[80vh] w-[80vw] rounded-2xl bg-primary/25 p-4 md:p-6">
         <video
+          ref={videoRef}
           className="h-full w-full rounded-xl bg-primary/20 object-contain"
-          src="/hero-video.mp4"
           autoPlay
           muted
           loop
           playsInline
           preload="auto"
-        />
+        >
+          <source src="/hero-video.mp4" type="video/mp4" />
+        </video>
       </div>
 
       {/* Asset: middle layer above video, anchored near video's bottom-right overlap */}
