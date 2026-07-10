@@ -18,6 +18,24 @@ body {
 #google_translate_element {
   display: none !important;
 }
+
+/* ── Suppress hover tooltip / popup ─────────────────────────────────── */
+#goog-gt-tt,
+.goog-te-balloon-frame,
+.goog-tooltip,
+.goog-tooltip-content {
+  display: none !important;
+  box-shadow: none !important;
+}
+
+/* Remove gray highlight Google Translate wraps around hovered words */
+.goog-text-highlight,
+[class*="VIpgJd"] {
+  background-color: transparent !important;
+  background: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 /* ─────────────────────────────────────────────────────────────────────── */
 
 @custom-variant dark (&:is(.dark *));
