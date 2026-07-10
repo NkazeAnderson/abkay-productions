@@ -17,12 +17,12 @@ export default function NavBar() {
           {/* GSAP targets #logoAndName and #CompanyName for the intro animation */}
           <div id="logoAndName" className="relative pointer-events-auto">
             <div className="flex gap-2 items-center">
-              <div className="relative w-20 aspect-square">
+              <div className="relative w-16 aspect-square rounded-full bg-black p-1.5">
                 <Image src="/logo.png" alt="AB KAY Logo" fill />
               </div>
               <span
                 id="CompanyName"
-                className="block font-bold uppercase text-black bg-primary text-xl px-3 py-2 rounded-lg text-nowrap overflow-hidden"
+                className="hidden md:block font-bold uppercase text-black bg-primary text-xl px-3 py-2 rounded-lg text-nowrap overflow-hidden"
               >
                 AB KAY Productions
               </span>

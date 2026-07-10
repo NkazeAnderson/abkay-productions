@@ -482,19 +482,19 @@ function HeroImageSrollBox(props: {
 
 function HeroPulseBar(props: {}) {
   return (
-    <div className=" relative h-16 overflow-hidden">
+    <div className="relative h-28 md:h-16 overflow-hidden">
       <div className="absolute h-2 aspect-square left-1/2 top-1/2 -translate-x-1/2  -translate-y-1/2 rounded-full bg-primary siren"></div>
-      <div className=" absolute inset-0 flex items-center justify-center gap-2 ">
+      <div className="absolute inset-0 flex flex-col md:flex-row items-center justify-center gap-2 md:gap-3">
         {/* use the text create a mask, the background shoud be the text-zinc */}
         {/* masked text 1 */}
-        <p className="text-5xl text-white/70 font-black uppercase cursor-none select-none">
+        <p className="text-base md:text-5xl text-white/70 font-black uppercase cursor-none select-none whitespace-nowrap leading-none tracking-wide md:tracking-normal">
           EVERYDAY LIFE
         </p>
         {/* center golden siren */}
         {/* sends out a golden pulse which goes across the length of the siren box */}
-        <div className="h-10 w-1/10 bg-primary/20 rounded-full"></div>
+        <div className="h-1 w-32 md:h-10 md:w-1/10 bg-primary/20 rounded-full"></div>
         {/* masked text 2 */}
-        <p className="text-5xl  text-white/70 font-black uppercase">
+        <p className="text-base md:text-5xl text-white/70 font-black uppercase whitespace-nowrap leading-none tracking-wide md:tracking-normal">
           Entertainment
         </p>
       </div>

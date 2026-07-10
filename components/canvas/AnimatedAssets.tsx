@@ -1,14 +1,7 @@
 import { useGSAP } from "@gsap/react";
-import {
-  Box,
-  Center,
-  Environment,
-  Float,
-  PerspectiveCamera,
-  useEnvironment,
-} from "@react-three/drei";
+import { Box, Center, Environment, Float } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
-import React, { Suspense, useEffect, useRef } from "react";
+import React, { Suspense, useRef } from "react";
 import { Group } from "three";
 import { HeroModel } from "./HeroModel";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
@@ -16,51 +9,14 @@ import { gsap, ScrollTrigger } from "@/lib/gsap";
 function AnimatedAssets() {
   const modelGroupRef = useRef<Group>(null);
   const { camera } = useThree();
-  const followMouse = useRef(false);
 
-  // Inside your 3D Scene Component:
-  useGSAP(() => {
-    if (!modelGroupRef.current) return;
-
-    const baseRotationX = modelGroupRef.current.rotation.x;
-    const baseRotationY = modelGroupRef.current.rotation.y;
-
-    // 2. Set the maximum hover range deviation (e.g., 20 degrees max shift)
-    const maxDeltaX = Math.PI / 40;
-    const maxDeltaY = Math.PI / 3;
-
-    const handleMouseMove = (e: MouseEvent) => {
-      if (!followMouse.current) {
-        return;
-      }
-      // 3. Normalized mouse coordinates (-1 to 1)
-      const normalizedX = (e.clientX / window.innerWidth) * 2 - 1;
-      const normalizedY = (e.clientY / window.innerHeight) * 2 - 1;
-
-      // 4. Calculate target values relative to the base positioning
-      const targetRotationY = baseRotationY + normalizedX * maxDeltaY;
-      const targetRotationX = baseRotationX + normalizedY * maxDeltaX;
-
-      // 4. Animate both rotation axes smoothly in a single call
-      gsap.to(modelGroupRef.current!.rotation, {
-        y: targetRotationY, // Smooth horizontal tracking
-        x: targetRotationX, // Smooth vertical tilting
-        duration: 1, // Premium damping effect
-        ease: "elastic", // Clean deceleration curve
-        overwrite: "auto", // Clear out overlapping frames to optimize performance
-      });
-    };
-
-    // 5. Initialize tracking listener
-    window.addEventListener("mousemove", handleMouseMove);
-
-    return () => {
-      window.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, [modelGroupRef.current, followMouse.current]);
+  // Choreographed poses for section-to-section movement.
+  const centerPose = { x: 0.5, y: -0.2, z: 0 };
+  const rightBottomPose = { x: 1.5, y: -1.6, z: 0 };
+  const ceoLeftPose = { x: -3.6, y: -0.9, z: 3.4 };
+  const bottomRightPose = { x: 1.8, y: -1.7, z: 0.2 };
 
   useGSAP(() => {
-    console.log("model", modelGroupRef.current, "Camera", camera);
     const scrollTriggerProps: ScrollTrigger.Vars = {
       trigger: "#homeAbout",
       start: "top 60%",
@@ -88,20 +44,14 @@ function AnimatedAssets() {
       ease: "none",
       duration: 6,
       onUpdate,
-      onStart: () => {
-        followMouse.current = false;
-      },
     });
 
     tl.to(modelGroupRef.current.position, {
-      x: 6,
+      x: rightBottomPose.x,
+      y: rightBottomPose.y,
+      z: rightBottomPose.z,
       duration: 6,
       ease: "none",
-      onUpdate: () => {
-        if (followMouse.current) {
-          followMouse.current = false;
-        }
-      },
     });
     tl.to(
       modelGroupRef.current.rotation,
@@ -109,9 +59,6 @@ function AnimatedAssets() {
         y: -0.7 - Math.PI * 2,
         duration: 6,
         ease: "none",
-        onComplete: () => {
-          followMouse.current = true;
-        },
       },
       "<",
     );
@@ -130,7 +77,6 @@ function AnimatedAssets() {
         end: "top 10%",
         scrub: 1,
         onEnter: () => {
-          followMouse.current = false;
           // non-scrubbed looped float while in CEO section
           ceoFloatTween = gsap.to(model.position, {
             y: "+=0.1",
@@ -145,10 +91,8 @@ function AnimatedAssets() {
             ceoFloatTween.kill();
             ceoFloatTween = null;
           }
-          followMouse.current = true;
         },
         onEnterBack: () => {
-          followMouse.current = false;
           ceoFloatTween = gsap.to(model.position, {
             y: "+=0.1",
             duration: 1.2,
@@ -162,12 +106,34 @@ function AnimatedAssets() {
             ceoFloatTween.kill();
             ceoFloatTween = null;
           }
-          followMouse.current = true;
         },
       },
     });
-    // scrubbed movement: zoom in and shift left by -3 units on x (ease none)
-    ceoTL.to(model.position, { z: 3, x: 5, duration: 1, ease: "none" });
+    // CEO section: zoom in and move left toward the profile image zone.
+    ceoTL.to(model.position, {
+      x: ceoLeftPose.x,
+      y: ceoLeftPose.y,
+      z: ceoLeftPose.z,
+      duration: 1,
+      ease: "none",
+    });
+
+    // After CEO, settle the asset back to bottom-right.
+    const galleryTL = gsap.timeline({
+      scrollTrigger: {
+        trigger: "#gallery",
+        start: "top 65%",
+        end: "top 10%",
+        scrub: 1,
+      },
+    });
+    galleryTL.to(model.position, {
+      x: bottomRightPose.x,
+      y: bottomRightPose.y,
+      z: bottomRightPose.z,
+      duration: 1,
+      ease: "none",
+    });
 
     // gallery -> testimonials: continuous rotation while in view
     // Trigger on `#testimonials` so nothing happens when entering `#gallery`.
@@ -177,18 +143,6 @@ function AnimatedAssets() {
         start: "top 60%",
         end: "top 10%",
         scrub: 1,
-        onEnter: () => {
-          followMouse.current = false;
-        },
-        onLeave: () => {
-          followMouse.current = true;
-        },
-        onEnterBack: () => {
-          followMouse.current = false;
-        },
-        onLeaveBack: () => {
-          followMouse.current = true;
-        },
       },
     });
     // scrubbed continuous rotation (ease none)
@@ -202,6 +156,7 @@ function AnimatedAssets() {
     return () => {
       tl.kill();
       ceoTL.kill();
+      galleryTL.kill();
       testimonialsTL.kill();
       if (ceoFloatTween) ceoFloatTween.kill();
       ScrollTrigger.refresh();
@@ -209,7 +164,10 @@ function AnimatedAssets() {
   }, [modelGroupRef.current]);
   return (
     <>
-      <group ref={modelGroupRef}>
+      <group
+        ref={modelGroupRef}
+        position={[centerPose.x, centerPose.y, centerPose.z]}
+      >
         <Environment preset="sunset" />
         <pointLight position={[0, 0, -2]} intensity={10} color="white" />
         <Center>

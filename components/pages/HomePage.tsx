@@ -6,7 +6,7 @@ import { Card } from "../ui/card";
 import { Images, Quote, Star } from "lucide-react";
 import { Button } from "../ui/button";
 import Hero from "../overlay/Hero";
-import gsap from "gsap";
+import { gsap, ScrollTrigger } from "@/lib/gsap";
 
 type Industry = {
   name: string;
@@ -35,7 +35,7 @@ const INDUSTRIES: Industry[] = [
     offerings: ["Music Production", "Video Production", "Artist Signing"],
     videoSrc: "/industries/music-short.mp4",
     animationClass: "industry-card-left",
-    className: "translate-x-full -rotate-12 z-10",
+    className: "md:translate-x-full md:-rotate-12 md:z-10",
   },
   {
     name: "Fast Food",
@@ -45,7 +45,7 @@ const INDUSTRIES: Industry[] = [
     offerings: ["Snacks", "Meals", "Drinks"],
     videoSrc: "/industries/food-short.mp4",
     animationClass: "industry-card-center",
-    className: "z-20",
+    className: "md:z-20",
   },
   {
     name: "Complex",
@@ -55,7 +55,7 @@ const INDUSTRIES: Industry[] = [
     offerings: ["Food", "Beer & Whisky", "Wine Service"],
     videoSrc: "/industries/complex-short.mp4",
     animationClass: "industry-card-right",
-    className: "-translate-x-full rotate-12 z-10",
+    className: "md:-translate-x-full md:rotate-12 md:z-10",
   },
 ];
 
@@ -149,6 +149,10 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
+    if (window.innerWidth < 768) {
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries, observer) => {
         entries.forEach((item) => {
@@ -188,6 +192,39 @@ function HomePage() {
     el && observer.observe(el);
   }, []);
 
+  useEffect(() => {
+    const cards = gsap.utils.toArray<HTMLElement>(".industry-card");
+    if (!cards.length || window.innerWidth >= 768) {
+      return;
+    }
+
+    cards.forEach((card) => {
+      gsap.fromTo(
+        card,
+        { x: -72, opacity: 0, rotate: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 0.9,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: card,
+            start: "top 88%",
+            once: true,
+          },
+        },
+      );
+    });
+
+    return () => {
+      ScrollTrigger.getAll()
+        .filter((trigger) =>
+          trigger.trigger?.classList?.contains("industry-card"),
+        )
+        .forEach((trigger) => trigger.kill());
+    };
+  }, []);
+
   return (
     <main id="homePage" className="relative w-screen overflow-x-hidden z-10">
       <Hero />
@@ -197,7 +234,7 @@ function HomePage() {
         className="reveal-section min-h-screen pt-[30vh] pb-20 px-[6%] flex flex-col justify-center"
       >
         <div className="max-w-xl space-y-5 p-8 rounded-2xl bg-black/70 backdrop-blur-sm border border-white/10 shadow-xl">
-          <h1 className="tracking-wide text-yellow-50">
+          <h1 className="text-4xl md:text-6xl tracking-wide text-yellow-50 leading-tight">
             Entertainment At It's Best
           </h1>
           <p className="text-slate-200">
@@ -205,15 +242,15 @@ function HomePage() {
             <b className="text-white"> AB KAY Productions </b>
             brings you 3 distinct industries for your amusement:
           </p>
-          <ul id="industries-list" className="list-none space-y-2">
-            <li className="industries-item text-slate-200">
-              🎺 AB KAY Productions Music Studio
+          <ul id="industries-list" className="list-disc space-y-2 ">
+            <li className="industries-item text-primary text-2xl">
+              🎺 AB KAY Music Production
             </li>
-            <li className="industries-item text-slate-200">
-              🍻 AB KAY Complex
-            </li>
-            <li className="industries-item text-slate-200">
+            <li className="industries-item text-primary text-2xl">
               🍔 AB KAY Fast Foods
+            </li>
+            <li className="industries-item text-primary text-2xl">
+              🍻 AB KAY Complex
             </li>
           </ul>
         </div>
@@ -235,7 +272,7 @@ function HomePage() {
           {INDUSTRIES.map((industry) => (
             <Card
               key={industry.slug}
-              className={`${industry.className} ${industry.animationClass} w-full md:w-[31%] border border-white/10 hover:border-primary/40 transition-colors duration-300`}
+              className={`industry-card ${industry.className} ${industry.animationClass} w-full md:w-[31%] border border-white/10 hover:border-primary/40 transition-colors duration-300`}
             >
               <div className="space-y-4 px-4 pb-4">
                 <video
@@ -330,22 +367,23 @@ function HomePage() {
             </p>
           </div>
 
-          <div className="h-screen grid max-w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 grid-rows-4">
+          <div className="columns-2 gap-4 space-y-4 md:columns-3 lg:columns-4">
             {GALLERY_ITEMS.map((item) => (
               <div
                 key={item.src}
-                className={`relative bg-[#111] shadow-2xl ${
+                className={`relative mb-4 break-inside-avoid bg-[#111] shadow-2xl overflow-hidden ${
                   item.large
-                    ? "col-span-1 lg:col-span-2 row-span-2 rounded-lg shadow-black/40"
-                    : "col-span-1 row-span-1 rounded-[2rem] shadow-black/30"
+                    ? "h-72 sm:h-80 md:h-108 rounded-2xl shadow-black/40"
+                    : "h-44 sm:h-56 md:h-64 rounded-[1.6rem] shadow-black/30"
                 }`}
               >
                 <Image
                   src={item.src}
                   alt={item.alt}
                   fill
+                  sizes="(max-width: 767px) 50vw, (max-width: 1023px) 33vw, 25vw"
                   className={`object-cover grayscale hover:grayscale-0 transition-all duration-500 ${
-                    item.large ? "rounded-lg" : "rounded-[2rem]"
+                    item.large ? "rounded-2xl" : "rounded-[1.6rem]"
                   }`}
                 />
               </div>
