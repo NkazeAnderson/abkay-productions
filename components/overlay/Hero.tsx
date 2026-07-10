@@ -11,6 +11,22 @@ type HeroImageItemProps = {
   id: string;
 };
 
+const HERO_IMAGE_URLS = [
+  "/hero/hero_01.webp",
+  "/hero/hero_02.webp",
+  "/hero/hero_03.webp",
+  "/hero/hero_04.webp",
+  "/hero/hero_05.webp",
+  "/hero/hero_06.webp",
+  "/hero/hero_07.webp",
+  "/hero/hero_08.webp",
+  "/hero/hero_09.webp",
+  "/hero/hero_10.webp",
+  "/hero/hero_11.webp",
+  "/hero/hero_12.webp",
+  "/hero/hero_13.webp",
+];
+
 const FALLBACK_HERO_IMAGE = "/sample-hero.jpg";
 const MIN_ROW_IMAGE_COUNT = 6;
 const MOBILE_MAX_UNIQUE_IMAGES = 6;
@@ -72,61 +88,26 @@ export default function Hero() {
   }, []);
 
   useEffect(() => {
-    const controller = new AbortController();
+    const maxUniqueImages = isMobile
+      ? MOBILE_MAX_UNIQUE_IMAGES
+      : DESKTOP_MAX_UNIQUE_IMAGES;
+    const optimizedHeroImages = HERO_IMAGE_URLS.slice(0, maxUniqueImages);
 
-    const loadHeroImages = async () => {
-      try {
-        const response = await fetch("/api/hero-images", {
-          signal: controller.signal,
-          cache: "force-cache",
-        });
+    const topRowUrls = optimizedHeroImages.filter(
+      (_, index) => index % 2 === 0,
+    );
+    const bottomRowUrls = optimizedHeroImages.filter(
+      (_, index) => index % 2 === 1,
+    );
 
-        if (!response.ok) {
-          return;
-        }
-
-        const data = (await response.json()) as { images?: string[] };
-        const heroImages = Array.isArray(data.images)
-          ? data.images.filter((imagePath) => typeof imagePath === "string")
-          : [];
-
-        if (!heroImages.length) {
-          return;
-        }
-
-        const isMobile = window.matchMedia("(max-width: 768px)").matches;
-        const maxUniqueImages = isMobile
-          ? MOBILE_MAX_UNIQUE_IMAGES
-          : DESKTOP_MAX_UNIQUE_IMAGES;
-        const optimizedHeroImages = heroImages.slice(0, maxUniqueImages);
-
-        const topRowUrls = optimizedHeroImages.filter(
-          (_, index) => index % 2 === 0,
-        );
-        const bottomRowUrls = optimizedHeroImages.filter(
-          (_, index) => index % 2 === 1,
-        );
-
-        setTopImages(buildRowItems(topRowUrls, MIN_ROW_IMAGE_COUNT));
-        setBottomImages(
-          buildRowItems(
-            bottomRowUrls.length ? bottomRowUrls : [...topRowUrls].reverse(),
-            MIN_ROW_IMAGE_COUNT,
-          ),
-        );
-      } catch (error) {
-        if ((error as Error).name === "AbortError") {
-          return;
-        }
-      }
-    };
-
-    loadHeroImages();
-
-    return () => {
-      controller.abort();
-    };
-  }, []);
+    setTopImages(buildRowItems(topRowUrls, MIN_ROW_IMAGE_COUNT));
+    setBottomImages(
+      buildRowItems(
+        bottomRowUrls.length ? bottomRowUrls : [...topRowUrls].reverse(),
+        MIN_ROW_IMAGE_COUNT,
+      ),
+    );
+  }, [isMobile]);
 
   const scheduleCycle = () => {
     if (isMobile) {
@@ -349,7 +330,7 @@ export default function Hero() {
     gsap.to(".industries-item", {
       opacity: 1,
       translateY: 0,
-      duration: 2,
+      duration: 1.5,
       ease: "power4.in",
       scrollTrigger: {
         trigger: "#industries-list",

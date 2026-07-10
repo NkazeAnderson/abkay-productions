@@ -1,53 +1,44 @@
 "use client";
 
-import { Sky } from "@react-three/drei";
+import { Html, Sky } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
 
 import AnimatedAssets from "./AnimatedAssets";
 
 function SkyBase() {
-  return <Sky sunPosition={[0, 10, -5]} turbidity={4} rayleigh={0.5} />;
+  return (
+    <Sky
+      sunPosition={[-6, 1.2, -10]}
+      turbidity={8}
+      rayleigh={1.4}
+      mieCoefficient={0.02}
+      mieDirectionalG={0.92}
+    />
+  );
 }
 
 function DayLighting() {
   return (
     <>
-      {/* Warm, strong ambient mimicking open sky bounce light */}
-      <ambientLight intensity={1.4} color="#fff4d6" />
-      {/* Primary sun — overhead directional */}
+      {/* Dusk ambient: softer and warmer than midday */}
+      <ambientLight intensity={0.95} color="#ffd9b3" />
+      {/* Low sun near the horizon for 6pm tone */}
       <directionalLight
-        position={[4, 10, 2]}
-        intensity={6}
-        color="#fffbe0"
+        position={[-6, 2, -10]}
+        intensity={2.6}
+        color="#ffb57a"
         castShadow
       />
-      {/* Soft fill from opposite side to reduce harsh shadow */}
-      <directionalLight
-        position={[-4, 4, -2]}
-        intensity={1.2}
-        color="#cde4ff"
-      />
+      {/* Cool sky fill on the opposite side */}
+      <directionalLight position={[4, 3, 2]} intensity={0.9} color="#a9c8ff" />
     </>
   );
 }
 
-export default function Scene() {
+function CanvasVideoLayer() {
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden">
-      {/* Sky: base background */}
-      <Canvas
-        className="absolute! inset-0 z-0"
-        gl={{
-          antialias: true,
-          alpha: true,
-          powerPreference: "low-power",
-        }}
-      >
-        <SkyBase />
-      </Canvas>
-
-      {/* Video: bottom layer above sky (top-right, 80% viewport size with frame padding) */}
-      <div className="pointer-events-none absolute right-0 top-0 z-10 h-[80vh] w-[80vw] rounded-2xl bg-primary/25 p-4 md:p-6">
+    <Html fullscreen className="pointer-events-none">
+      <div className="absolute right-0 top-0 w-[90vw] h-[50vh] md:h-[80vh] md:w-[80vw] rounded-2xl bg-primary/20 p-4 md:p-6">
         <video
           className="h-full w-full rounded-xl bg-primary/20 object-contain"
           src="/hero-video.mp4"
@@ -58,10 +49,29 @@ export default function Scene() {
           preload="auto"
         />
       </div>
+    </Html>
+  );
+}
 
-      {/* Asset: middle layer above video, anchored near video's bottom-right overlap */}
+export default function Scene() {
+  return (
+    <div className="fixed inset-0 z-0 overflow-hidden bg-sky-200">
+      {/* Sky background layer */}
+      <Canvas
+        className="absolute! inset-0 z-0"
+        gl={{
+          antialias: true,
+          alpha: false,
+          powerPreference: "low-power",
+        }}
+      >
+        <SkyBase />
+        <CanvasVideoLayer />
+      </Canvas>
+
+      {/* Transparent 3D asset layer above video */}
       <div
-        className="pointer-events-none absolute z-20"
+        className="pointer-events-none absolute z-30"
         style={{
           right: "clamp(0.75rem, 2vw, 1.5rem)",
           top: "calc(80vh - 16rem)",
