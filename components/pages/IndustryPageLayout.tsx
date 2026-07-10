@@ -58,7 +58,10 @@ export default function IndustryPageLayout({
     return () => {
       ScrollTrigger.getAll().forEach((trigger) => {
         const triggerNode = trigger.trigger;
-        if (triggerNode instanceof Element && contentRef.current?.contains(triggerNode)) {
+        if (
+          triggerNode instanceof Element &&
+          contentRef.current?.contains(triggerNode)
+        ) {
           trigger.kill();
         }
       });

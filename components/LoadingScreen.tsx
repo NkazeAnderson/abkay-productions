@@ -34,7 +34,7 @@ export default function LoadingScreen() {
   return (
     <div
       aria-hidden="true"
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-6 bg-black pointer-events-none transition-opacity duration-700 ${
+      className={`fixed inset-0 z-9999 flex flex-col items-center justify-center gap-6 bg-black pointer-events-none transition-opacity duration-700 ${
         fading ? "opacity-0" : "opacity-100"
       }`}
     >

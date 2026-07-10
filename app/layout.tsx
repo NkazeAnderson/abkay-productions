@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins, Noto_Sans } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import RegisterGsapPlugins from "@/components/RegisterGsapPlugins";
 import NavBar from "@/components/layout/NavBar";
@@ -40,6 +41,23 @@ export default function RootLayout({
           <NavBar />
           {children}
         </SmoothScrollProvider>
+        {/* Hidden Google Translate widget container */}
+        <div id="google_translate_element" style={{ display: "none" }} />
+        <Script id="google-translate-init" strategy="afterInteractive">{`
+          window.googleTranslateElementInit = function() {
+            if (window.google && window.google.translate) {
+              new window.google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,fr',
+                autoDisplay: false,
+              }, 'google_translate_element');
+            }
+          };
+        `}</Script>
+        <Script
+          src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
