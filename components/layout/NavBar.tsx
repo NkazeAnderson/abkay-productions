@@ -2,9 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 
-const NAV_LINKS = ["About", "Contact Us"];
+const NAV_LINKS = [
+  { label: "About", href: "/about" },
+  { label: "Contact Us", href: "/contact" },
+];
 
 export default function NavBar() {
   const [open, setOpen] = useState(false);
@@ -32,12 +36,13 @@ export default function NavBar() {
           {/* Desktop nav — GSAP targets .navLinks and slides it down from top:100vh */}
           <div className="hidden md:flex gap-6 items-center relative navLinks top-[100vh] py-2 px-6 bg-black/90 backdrop-blur rounded-full border border-white/10 pointer-events-auto">
             {NAV_LINKS.map((link) => (
-              <button
-                key={link}
-                className="text-sm font-medium text-white/80 hover:text-primary transition-colors cursor-pointer"
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm font-medium text-white/80 hover:text-primary transition-colors"
               >
-                {link}
-              </button>
+                {link.label}
+              </Link>
             ))}
           </div>
 
@@ -61,13 +66,14 @@ export default function NavBar() {
         }`}
       >
         {NAV_LINKS.map((link) => (
-          <button
-            key={link}
+          <Link
+            key={link.href}
+            href={link.href}
             className="text-3xl font-heading font-semibold text-white hover:text-primary transition-colors"
             onClick={() => setOpen(false)}
           >
-            {link}
-          </button>
+            {link.label}
+          </Link>
         ))}
       </div>
     </>

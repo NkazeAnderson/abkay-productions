@@ -54,6 +54,7 @@ export default function Hero() {
   const animationRunningRef = useRef(false);
   const cycleScheduledRef = useRef(false);
   const cycleTimeoutRef = useRef<number | null>(null);
+  const hasPlayedIntroRef = useRef(false);
 
   const scrollSpeed = 100;
 
@@ -226,33 +227,56 @@ export default function Hero() {
 
   //Here i will describe how my animations should work
   useGSAP(() => {
-    const tl = gsap.timeline();
     if (!window || !trackRef.current) {
       return;
     }
 
-    // First name the company name visible
-    tl.fromTo("#CompanyName", { width: 0 }, { width: 280, duration: 3 })
+    const hasPlayedIntro =
+      typeof window !== "undefined" &&
+      window.sessionStorage.getItem("abk-home-intro-played") === "true";
 
-      //Move the  logo from being centered to its original position
-      .fromTo(
-        "#logoAndName",
-        {
-          left: () => window.innerWidth / 2,
-          top: () => window.innerHeight / 2,
-          xPercent: -50,
-          yPercent: -50,
+    hasPlayedIntroRef.current = hasPlayedIntro;
+
+    if (hasPlayedIntro) {
+      gsap.set("#logoAndName", {
+        left: 0,
+        top: 0,
+        xPercent: 0,
+        yPercent: 0,
+      });
+      gsap.set("#CompanyName", { width: "auto" });
+      gsap.set("#homePage", { opacity: 1 });
+    } else {
+      const tl = gsap.timeline({
+        onComplete: () => {
+          window.sessionStorage.setItem("abk-home-intro-played", "true");
+          hasPlayedIntroRef.current = true;
         },
-        {
-          left: 0,
-          top: 0,
-          xPercent: 0,
-          yPercent: 0,
-          duration: 2,
-        },
-      )
-      //Make the contents of the home page visible
-      .fromTo("#homePage", { opacity: 0 }, { opacity: 1, duration: 2 });
+      });
+
+      // First name the company name visible
+      tl.fromTo("#CompanyName", { width: 0 }, { width: 280, duration: 3 })
+
+        //Move the  logo from being centered to its original position
+        .fromTo(
+          "#logoAndName",
+          {
+            left: () => window.innerWidth / 2,
+            top: () => window.innerHeight / 2,
+            xPercent: -50,
+            yPercent: -50,
+          },
+          {
+            left: 0,
+            top: 0,
+            xPercent: 0,
+            yPercent: 0,
+            duration: 2,
+          },
+        )
+        //Make the contents of the home page visible
+        .fromTo("#homePage", { opacity: 0 }, { opacity: 1, duration: 2 });
+    }
 
     // When the first element in the scroll reached about 70% of the screen size make the ripples effect
     gsap.to(".siren", {
@@ -438,11 +462,15 @@ function HeroImageSrollBox(props: {
 }) {
   const isTop = props.className?.includes("hero-scroll-top");
   const isBottom = props.className?.includes("hero-scroll-bottom");
+  const duration = isTop ? 60 : isBottom ? 65 : null;
   const animation = isTop
     ? "marquee-left 60s linear infinite"
     : isBottom
       ? "marquee-right 65s linear infinite"
       : undefined;
+  const animationDelay = duration
+    ? `-${Math.floor(Date.now() / 1000) % duration}s`
+    : undefined;
 
   return (
     <>
@@ -450,7 +478,7 @@ function HeroImageSrollBox(props: {
         className={`flex flex-nowrap gap-4 items-center h-full relative ${props.className}`}
         style={
           animation
-            ? { animation, minWidth: "max-content" }
+            ? { animation, animationDelay, minWidth: "max-content" }
             : { minWidth: "max-content" }
         }
       >
