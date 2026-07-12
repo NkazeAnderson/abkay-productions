@@ -145,7 +145,7 @@ export default function MusicProductionPage() {
             to visibility for talent that is ready to grow.
           </p>
           <a
-            href="https://wa.me/237000000000"
+            href="https://wa.me/237654894282"
             target="_blank"
             rel="noopener noreferrer"
           >

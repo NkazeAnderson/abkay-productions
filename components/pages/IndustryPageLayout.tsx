@@ -18,7 +18,7 @@ export default function IndustryPageLayout({
   title,
   videoSrc = "/hero-video.mp4",
   children,
-  whatsappNumber = "237000000000",
+  whatsappNumber = "237654894282",
 }: IndustryPageLayoutProps) {
   const contentRef = useRef<HTMLDivElement>(null);
 

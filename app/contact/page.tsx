@@ -23,7 +23,7 @@ const SOCIAL_LINKS = [
   },
 ];
 
-const WHATSAPP_NUMBER = "237000000000";
+const WHATSAPP_NUMBER = "237654894282";
 
 const CONTACT_INFO = [
   {
@@ -34,7 +34,7 @@ const CONTACT_INFO = [
     ),
     iconBg: "#25D366",
     label: "WhatsApp",
-    value: "+237 000 000 000",
+    value: "+237 654 894 282",
     sub: "Chat with us directly",
     href: `https://wa.me/${WHATSAPP_NUMBER}`,
   },
