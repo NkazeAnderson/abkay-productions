@@ -5,66 +5,62 @@ import IndustryPageLayout from "@/components/pages/IndustryPageLayout";
 
 const CHEFS = [
   {
-    name: "Chef Ama",
+    name: "Chef Ice",
     years: 8,
-    image:
-      "https://images.unsplash.com/photo-1577219491135-ce391730fb2c?w=400&q=80",
-    tags: ["Shawarma", "Grills", "Burgers"],
-  },
-  {
-    name: "Chef Daniel",
-    years: 6,
-    image:
-      "https://images.unsplash.com/photo-1607631568010-a87245c0daf8?w=400&q=80",
-    tags: ["Pizza", "Pasta", "African"],
-  },
-  {
-    name: "Chef Fatima",
-    years: 10,
-    image:
-      "https://images.unsplash.com/photo-1581299894007-aaa50297cf16?w=400&q=80",
-    tags: ["Pastries", "Coffee", "Salads"],
+    image: "/ice.png",
+    tags: ["Pizza", "Coffee", "Burgers"],
   },
 ];
 
 const PRODUCTS = [
   {
-    name: "Chicken Shawarma",
+    name: "Pizza Varieties",
     image:
-      "https://images.unsplash.com/photo-1561651823-34feb02250e4?w=400&q=80",
+      "https://images.unsplash.com/photo-1513104890138-7c749659a591?w=400&q=80&fit=crop",
   },
   {
-    name: "Beef Burger",
+    name: "Platter Dishes",
     image:
-      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=400&q=80&fit=crop",
   },
   {
-    name: "Fried Chicken",
+    name: "Shawarma Selection",
     image:
-      "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400&q=80",
+      "https://images.unsplash.com/photo-1530469912745-a215c6b256ea?w=400&q=80&fit=crop",
   },
   {
-    name: "Jollof Rice",
+    name: "Burgers",
     image:
-      "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=400&q=80",
+      "https://images.unsplash.com/photo-1550547660-d9450f859349?w=400&q=80&fit=crop",
   },
   {
-    name: "Fresh Juice",
+    name: "Coffee Drinks",
     image:
-      "https://images.unsplash.com/photo-1600271886742-f049cd451bba?w=400&q=80",
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=400&q=80&fit=crop",
   },
   {
-    name: "Spring Rolls",
+    name: "Juices",
     image:
-      "https://images.unsplash.com/photo-1617093727343-374698b1b08d?w=400&q=80",
+      "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?w=400&q=80&fit=crop",
+  },
+  {
+    name: "Beers",
+    image:
+      "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80&fit=crop",
+  },
+  {
+    name: "Liquors",
+    image:
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?w=400&q=80&fit=crop",
+  },
+  {
+    name: "Wines",
+    image:
+      "https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?w=400&q=80&fit=crop",
   },
 ];
 
-const HALL_IMAGES = [
-  "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=700&q=80",
-  "https://images.unsplash.com/photo-1559339352-11d035aa65de?w=700&q=80",
-  "https://images.unsplash.com/photo-1537047902294-62a40c20a6ae?w=700&q=80",
-];
+const HALL_IMAGES = ["/ff1.jpg", "/ff2.jpg", "/ff3.jpg"];
 
 export default function FastFoodPage() {
   return (

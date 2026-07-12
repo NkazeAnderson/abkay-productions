@@ -7,47 +7,31 @@ import IndustryPageLayout from "@/components/pages/IndustryPageLayout";
 
 const ARTISTS = [
   {
-    name: "Kofi Beats",
-    image:
-      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80",
+    name: "Lexy",
+    image: "/Lexy-artist.jpeg",
   },
   {
-    name: "Nadia M.",
-    image:
-      "https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=400&q=80",
-  },
-  {
-    name: "Jay Sound",
-    image:
-      "https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?w=400&q=80",
-  },
-  {
-    name: "Amara",
-    image:
-      "https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=400&q=80",
+    name: "Mukolah",
+    image: "/Mukolah-artist.jpeg",
   },
 ];
 
 const SERVICES = [
   {
     name: "Studio Recording",
-    image:
-      "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=400&q=80",
+    image: "/music-recording.jpg",
   },
   {
     name: "Mixing & Mastering",
-    image:
-      "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80",
+    image: "/music-mixing.jpg",
   },
   {
     name: "Music Video",
-    image:
-      "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=400&q=80",
+    image: "/video-production.jpg",
   },
   {
     name: "Beat Production",
-    image:
-      "https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?w=400&q=80",
+    image: "/beat-production.jpg",
   },
 ];
 

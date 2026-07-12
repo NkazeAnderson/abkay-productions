@@ -6,18 +6,15 @@ import IndustryPageLayout from "@/components/pages/IndustryPageLayout";
 const PRODUCTS = [
   {
     name: "Whiskey",
-    image:
-      "https://images.unsplash.com/photo-1527281400683-1aae777175f8?w=400&q=80",
+    image: "/complex-products/whisky.jpg",
   },
   {
     name: "Wine",
-    image:
-      "https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=400&q=80",
+    image: "/complex-products/wine.jpg",
   },
   {
     name: "Beer",
-    image:
-      "https://images.unsplash.com/photo-1608270586620-248524c67de9?w=400&q=80",
+    image: "/complex-products/beer.jpg",
   },
   {
     name: "Sweet Juice",
@@ -26,30 +23,31 @@ const PRODUCTS = [
   },
   {
     name: "Roasted Fish",
-    image:
-      "https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?w=400&q=80",
+    image: "/complex-products/fish.jpg",
   },
   {
     name: "Roasted Beef",
-    image:
-      "https://images.unsplash.com/photo-1544025162-d76694265947?w=400&q=80",
+    image: "/complex-products/soya.jpg",
   },
   {
     name: "Roasted Chicken",
-    image:
-      "https://images.unsplash.com/photo-1626645738196-c2a7c87a8f58?w=400&q=80",
+    image: "/complex-products/chicken.jpg",
   },
   {
-    name: "African Food",
-    image:
-      "https://images.unsplash.com/photo-1574894709920-11b28e7367e3?w=400&q=80",
+    name: "African Food Sample",
+    image: "/complex-products/af1.jpg",
+  },
+  {
+    name: "African Food Sample",
+    image: "/complex-products/af2.jpg",
   },
 ];
 
 const SPACE_IMAGES = [
-  "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?w=700&q=80",
-  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?w=700&q=80",
-  "https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?w=700&q=80",
+  "/complex1.jpg",
+  "/complex2.jpg",
+  "/complex3.jpg",
+  "/complex4.jpg",
 ];
 
 export default function ComplexPage() {
@@ -85,9 +83,9 @@ export default function ComplexPage() {
             from the moment they arrive.
           </p>
         </div>
-        <div className="relative h-80 md:h-112 rounded-3xl overflow-hidden shadow-lg">
+        <div className="relative h-screen w-full md:w-3/4 lg:w-1/2  rounded-3xl overflow-hidden shadow-lg self-center mx-auto">
           <Image
-            src="https://images.unsplash.com/photo-1470124182917-cc6e71b22ecc?w=1200&q=80"
+            src="/sales-girls.jpeg"
             alt="Service team"
             fill
             sizes="100vw"

@@ -1,7 +1,8 @@
 "use client";
 
-import { Html, Sky } from "@react-three/drei";
+import { Sky } from "@react-three/drei";
 import { Canvas } from "@react-three/fiber";
+import { useEffect, useRef } from "react";
 
 import AnimatedAssets from "./AnimatedAssets";
 
@@ -35,21 +36,56 @@ function DayLighting() {
   );
 }
 
-function CanvasVideoLayer() {
+function HeroVideoLayer() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) {
+      return;
+    }
+
+    video.muted = true;
+    video.defaultMuted = true;
+    video.playsInline = true;
+    video.setAttribute("muted", "");
+    video.setAttribute("playsinline", "true");
+    video.setAttribute("webkit-playsinline", "true");
+
+    const playVideo = async () => {
+      try {
+        await video.play();
+      } catch {
+        // iPhone Safari may defer playback until the element is fully ready.
+      }
+    };
+
+    void playVideo();
+
+    const handleCanPlay = () => {
+      void playVideo();
+    };
+
+    video.addEventListener("canplay", handleCanPlay);
+
+    return () => {
+      video.removeEventListener("canplay", handleCanPlay);
+    };
+  }, []);
+
   return (
-    <Html fullscreen className="pointer-events-none">
-      <div className="absolute right-0 top-0 w-[90vw] h-[50vh] md:h-[80vh] md:w-[80vw] rounded-2xl bg-primary/20 p-4 md:p-6">
-        <video
-          className="h-full w-full rounded-xl bg-primary/20 object-contain"
-          src="/hero-video.mp4"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-        />
-      </div>
-    </Html>
+    <div className="pointer-events-none absolute right-0 top-0 z-10 h-[50vh] w-[90vw] rounded-2xl bg-primary/20 p-4 md:h-[80vh] md:w-[80vw] md:p-6">
+      <video
+        ref={videoRef}
+        className="h-full w-full rounded-xl bg-primary/20 object-contain"
+        src="/hero-video.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="auto"
+      />
+    </div>
   );
 }
 
@@ -66,8 +102,9 @@ export default function Scene() {
         }}
       >
         <SkyBase />
-        <CanvasVideoLayer />
       </Canvas>
+
+      <HeroVideoLayer />
 
       {/* Transparent 3D asset layer above video */}
       <div

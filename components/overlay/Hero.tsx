@@ -12,6 +12,7 @@ type HeroImageItemProps = {
 };
 
 const HERO_IMAGE_URLS = [
+  "/hero/hero_00.jpeg",
   "/hero/hero_01.webp",
   "/hero/hero_02.webp",
   "/hero/hero_03.webp",
@@ -31,6 +32,14 @@ const FALLBACK_HERO_IMAGE = "/sample-hero.jpg";
 const MIN_ROW_IMAGE_COUNT = 6;
 const MOBILE_MAX_UNIQUE_IMAGES = 6;
 const DESKTOP_MAX_UNIQUE_IMAGES = 10;
+
+function getHeroImageFallbackUrl(url: string) {
+  return url.endsWith(".webp") ? url.replace(/\.webp$/i, ".jpg") : url;
+}
+
+function getPreferredHeroImageUrl(url: string, preferJpg: boolean) {
+  return preferJpg ? getHeroImageFallbackUrl(url) : url;
+}
 
 function createPlaceholderItems(count: number): HeroImageItemProps[] {
   return Array.from({ length: count }, () => ({
@@ -59,6 +68,7 @@ export default function Hero() {
   const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [preferJpgOnIPhone, setPreferJpgOnIPhone] = useState(false);
   const [topImages, setTopImages] = useState<HeroImageItemProps[]>(() =>
     createPlaceholderItems(MIN_ROW_IMAGE_COUNT),
   );
@@ -80,6 +90,7 @@ export default function Hero() {
     const updateIsMobile = () => setIsMobile(mediaQuery.matches);
 
     updateIsMobile();
+    setPreferJpgOnIPhone(/iPhone/i.test(window.navigator.userAgent));
     mediaQuery.addEventListener("change", updateIsMobile);
 
     return () => {
@@ -91,7 +102,9 @@ export default function Hero() {
     const maxUniqueImages = isMobile
       ? MOBILE_MAX_UNIQUE_IMAGES
       : DESKTOP_MAX_UNIQUE_IMAGES;
-    const optimizedHeroImages = HERO_IMAGE_URLS.slice(0, maxUniqueImages);
+    const optimizedHeroImages = HERO_IMAGE_URLS.slice(0, maxUniqueImages).map(
+      (url) => getPreferredHeroImageUrl(url, preferJpgOnIPhone),
+    );
 
     const topRowUrls = optimizedHeroImages.filter(
       (_, index) => index % 2 === 0,
@@ -107,7 +120,7 @@ export default function Hero() {
         MIN_ROW_IMAGE_COUNT,
       ),
     );
-  }, [isMobile]);
+  }, [isMobile, preferJpgOnIPhone]);
 
   const scheduleCycle = () => {
     if (isMobile) {
@@ -381,6 +394,12 @@ function HeroScrollImageItem({ idToAnimate, url, id }: HeroImageItemProps) {
   const imageHolderRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLImageElement>(null);
   const originalWidth = useRef(0);
+  const fallbackUrl = getHeroImageFallbackUrl(url);
+  const [currentUrl, setCurrentUrl] = useState(url);
+
+  useEffect(() => {
+    setCurrentUrl(url);
+  }, [url]);
 
   function createAnimateTimeline() {
     if (!imageHolderRef.current || !imageRef.current) {
@@ -459,13 +478,18 @@ function HeroScrollImageItem({ idToAnimate, url, id }: HeroImageItemProps) {
       <div className="  w-full h-full  overflow-hidden">
         <Image
           ref={imageRef}
-          src={url}
+          src={currentUrl}
           alt="hero image"
           fill
           sizes="(max-width: 640px) 72vw, (max-width: 1024px) 42vw, 26vw"
           quality={60}
           loading="lazy"
           className="object-cover rounded-md opacity-0 transition-opacity duration-500"
+          onError={() => {
+            if (currentUrl !== fallbackUrl) {
+              setCurrentUrl(fallbackUrl);
+            }
+          }}
           onLoad={(e) => {
             (e.currentTarget as HTMLImageElement).classList.remove("opacity-0");
           }}
@@ -536,17 +560,29 @@ function HeroImageSrollBox(props: {
 }
 
 function HeroSimpleScrollImageItem({ url, id }: { url: string; id: string }) {
+  const fallbackUrl = getHeroImageFallbackUrl(url);
+  const [currentUrl, setCurrentUrl] = useState(url);
+
+  useEffect(() => {
+    setCurrentUrl(url);
+  }, [url]);
+
   return (
     <div id={id} className="relative h-full aspect-video rounded-md">
       <div className="w-full h-full overflow-hidden rounded-md">
         <Image
-          src={url}
+          src={currentUrl}
           alt="hero image"
           fill
           sizes="(max-width: 640px) 72vw, (max-width: 1024px) 42vw, 26vw"
           quality={60}
           loading="lazy"
           className="object-cover rounded-md"
+          onError={() => {
+            if (currentUrl !== fallbackUrl) {
+              setCurrentUrl(fallbackUrl);
+            }
+          }}
         />
       </div>
       <div className="absolute inset-0 bg-black/25 rounded-md" />
