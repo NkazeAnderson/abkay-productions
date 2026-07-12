@@ -1,5 +1,11 @@
 import { useGSAP } from "@gsap/react";
-import { Box, Center, Environment, Float } from "@react-three/drei";
+import {
+  Box,
+  Center,
+  ContactShadows,
+  Environment,
+  Float,
+} from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import React, { Suspense, useRef } from "react";
 import { Group } from "three";
@@ -11,7 +17,7 @@ function AnimatedAssets() {
   const { camera } = useThree();
 
   // Choreographed poses for section-to-section movement.
-  const centerPose = { x: 0.5, y: -0.2, z: 0 };
+  const centerPose = { x: 1.2, y: -1.35, z: 0.2 };
   const rightBottomPose = { x: 1.5, y: -1.6, z: 0 };
   const ceoLeftPose = { x: -3.6, y: -0.9, z: 3.4 };
   const bottomRightPose = { x: 1.8, y: -1.7, z: 0.2 };
@@ -36,6 +42,54 @@ function AnimatedAssets() {
     const onUpdate = () => {
       currentCamera.lookAt(model.position);
     };
+
+    // Quick entrance pop so the asset is noticed early, then settles low-right.
+    gsap.set(model.position, {
+      x: rightBottomPose.x + 0.65,
+      y: rightBottomPose.y + 0.3,
+      z: rightBottomPose.z + 1.2,
+    });
+    gsap.set(model.rotation, { x: 0.06, y: -2.2, z: 0.08 });
+    gsap.set(model.scale, { x: 0.9, y: 0.9, z: 0.9 });
+
+    const introTL = gsap.timeline();
+    introTL
+      .to(model.position, {
+        x: centerPose.x,
+        y: centerPose.y,
+        z: centerPose.z,
+        duration: 1.15,
+        ease: "power3.out",
+      })
+      .to(
+        model.rotation,
+        {
+          x: 0,
+          y: -0.9,
+          z: 0,
+          duration: 1.15,
+          ease: "power3.out",
+        },
+        "<",
+      )
+      .to(
+        model.scale,
+        {
+          x: 1.04,
+          y: 1.04,
+          z: 1.04,
+          duration: 0.55,
+          ease: "power2.out",
+        },
+        "<",
+      )
+      .to(model.scale, {
+        x: 1,
+        y: 1,
+        z: 1,
+        duration: 0.5,
+        ease: "power2.inOut",
+      });
 
     tl.to(currentCamera.position, {
       x: 0,
@@ -154,6 +208,7 @@ function AnimatedAssets() {
 
     // cleanup for this GSAP context
     return () => {
+      introTL.kill();
       tl.kill();
       ceoTL.kill();
       galleryTL.kill();
@@ -169,14 +224,30 @@ function AnimatedAssets() {
         position={[centerPose.x, centerPose.y, centerPose.z]}
       >
         <Environment preset="sunset" />
-        <pointLight position={[0, 0, -2]} intensity={10} color="white" />
+        <pointLight position={[2, 2, 4]} intensity={2.2} color="#fff2dc" />
+        <pointLight position={[-3, 1, -3]} intensity={1.1} color="#8eb7ff" />
+        <spotLight
+          position={[-4, 6, 3]}
+          angle={0.45}
+          penumbra={1}
+          intensity={2.8}
+          color="#ffcf9e"
+        />
         <Center>
-          <Float>
+          <Float speed={1.6} rotationIntensity={0.35} floatIntensity={0.55}>
             <Suspense fallback={<Box />}>
               <HeroModel rotation={[Math.PI / 2, 0, 0]} />
             </Suspense>
           </Float>
         </Center>
+        <ContactShadows
+          position={[0, -2.15, 0]}
+          opacity={0.32}
+          width={7.5}
+          height={7.5}
+          blur={2.4}
+          far={8}
+        />
       </group>
     </>
   );

@@ -21,17 +21,19 @@ function SkyBase() {
 function DayLighting() {
   return (
     <>
-      {/* Dusk ambient: softer and warmer than midday */}
-      <ambientLight intensity={0.95} color="#ffd9b3" />
-      {/* Low sun near the horizon for 6pm tone */}
+      {/* Slightly lower ambient to preserve contrast on the model. */}
+      <ambientLight intensity={0.72} color="#ffd9b3" />
+      {/* Warm key light for sunset punch. */}
       <directionalLight
         position={[-6, 2, -10]}
-        intensity={2.6}
+        intensity={3.1}
         color="#ffb57a"
         castShadow
       />
-      {/* Cool sky fill on the opposite side */}
-      <directionalLight position={[4, 3, 2]} intensity={0.9} color="#a9c8ff" />
+      {/* Cool fill to keep specular shape definition. */}
+      <directionalLight position={[4, 3, 2]} intensity={1.25} color="#a9c8ff" />
+      {/* Rim edge highlight so silhouette reads over the video panel. */}
+      <directionalLight position={[0, 4, 8]} intensity={0.95} color="#fff1da" />
     </>
   );
 }
@@ -111,9 +113,9 @@ export default function Scene() {
         className="pointer-events-none absolute z-30"
         style={{
           right: "clamp(0.75rem, 2vw, 1.5rem)",
-          top: "calc(80vh - 16rem)",
-          width: "clamp(220px, 28vw, 420px)",
-          height: "clamp(220px, 42vh, 460px)",
+          top: "calc(86vh - 14rem)",
+          width: "clamp(250px, 30vw, 500px)",
+          height: "clamp(250px, 46vh, 520px)",
         }}
       >
         <Canvas
@@ -121,9 +123,13 @@ export default function Scene() {
           gl={{
             antialias: true,
             alpha: true,
-            powerPreference: "low-power",
+            powerPreference: "high-performance",
           }}
-          camera={{ position: [0, 4.5, 10], rotation: [-0.2, 0, 0] }}
+          camera={{
+            position: [0.4, 2.9, 7.2],
+            rotation: [-0.12, 0, 0],
+            fov: 42,
+          }}
         >
           <DayLighting />
           <AnimatedAssets />
