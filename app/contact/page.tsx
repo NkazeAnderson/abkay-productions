@@ -8,17 +8,17 @@ import { MapPin, Clock, Send, CheckCircle } from "lucide-react";
 const SOCIAL_LINKS = [
   {
     label: "Facebook",
-    href: "https://www.facebook.com/abkayproductions",
+    href: "https://web.facebook.com/abkayp/",
     icon: "/facebook.png",
   },
   {
     label: "TikTok",
-    href: "https://www.tiktok.com/@abkayproductions",
+    href: "https://www.tiktok.com/@ab.kay.production",
     icon: "/tiktok.png",
   },
   {
     label: "YouTube",
-    href: "https://www.youtube.com/@abkayproductions",
+    href: "https://www.youtube.com/channel/UCBT4yLKh7GPtwzr8WAdO0cw",
     icon: "/youtube.png",
   },
 ];
