@@ -1,18 +1,60 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MessageCircle } from "lucide-react";
 import IndustryPageLayout from "@/components/pages/IndustryPageLayout";
+import ImageLightbox from "@/components/ui/image-lightbox";
+
+type ArtistSocial = {
+  label: "Facebook" | "Instagram" | "TikTok" | "YouTube";
+  href: string;
+};
+
+const SOCIAL_ICON_MAP: Record<string, string> = {
+  Facebook: "/facebook.png",
+  Instagram: "/Instagram.png",
+  TikTok: "/tiktok.png",
+  YouTube: "/youtube.png",
+};
 
 const ARTISTS = [
   {
     name: "Lexy",
     image: "/Lexy-artist.jpeg",
+    socials: [
+      {
+        label: "Facebook",
+        href: "https://web.facebook.com/Lexy.again/",
+      },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/lexy_again/?hl=en",
+      },
+      {
+        label: "YouTube",
+        href: "https://www.youtube.com/watch?v=Rs0xPdKAA6g",
+      },
+    ] as ArtistSocial[],
   },
   {
     name: "Mukolah",
     image: "/Mukolah-artist.jpeg",
+    socials: [
+      {
+        label: "Facebook",
+        href: "https://web.facebook.com/people/Mukolah-mkl/100042529037030/",
+      },
+      {
+        label: "TikTok",
+        href: "https://www.tiktok.com/@mukolahmkl1",
+      },
+      {
+        label: "YouTube",
+        href: "https://www.youtube.com/@mukolahmkl",
+      },
+    ] as ArtistSocial[],
   },
 ];
 
@@ -36,6 +78,11 @@ const SERVICES = [
 ];
 
 export default function MusicProductionPage() {
+  const [activeImage, setActiveImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+
   return (
     <IndustryPageLayout title="Music Production" videoSrc="/hero-video.mp4">
       {/* ── Intro ────────────────────────────────────────────────── */}
@@ -74,14 +121,43 @@ export default function MusicProductionPage() {
               key={artist.name}
               className="group w-full max-w-57.5 text-center space-y-2"
             >
-              <div className="relative h-80 rounded-2xl overflow-hidden shadow-md">
-                <Image
-                  src={artist.image}
-                  alt={artist.name}
-                  fill
-                  sizes="(max-width:639px) 88vw, (max-width:1023px) 45vw, (max-width:1279px) 30vw, 230px"
-                  className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
+              <div className="relative h-80 rounded-2xl overflow-hidden shadow-md w-full">
+                <button
+                  type="button"
+                  onClick={() =>
+                    setActiveImage({ src: artist.image, alt: artist.name })
+                  }
+                  aria-label={`Preview ${artist.name}`}
+                  className="absolute inset-0 block w-full h-full cursor-zoom-in"
+                >
+                  <Image
+                    src={artist.image}
+                    alt={artist.name}
+                    fill
+                    sizes="(max-width:639px) 88vw, (max-width:1023px) 45vw, (max-width:1279px) 30vw, 230px"
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                </button>
+                <div className="absolute bottom-3 left-1/2 -translate-x-1/2 z-10 flex items-center justify-center gap-2 px-2 py-1.5 rounded-full bg-black/45 backdrop-blur-sm">
+                  {artist.socials.map((social) => (
+                    <a
+                      key={`${artist.name}-${social.label}`}
+                      href={social.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={social.label}
+                      className="w-9 h-9 rounded-full border border-primary/35 bg-white/80 shadow-sm flex items-center justify-center hover:bg-primary/15 hover:border-primary/60 transition-colors"
+                    >
+                      <Image
+                        src={SOCIAL_ICON_MAP[social.label]}
+                        alt={social.label}
+                        width={16}
+                        height={16}
+                        className="object-contain"
+                      />
+                    </a>
+                  ))}
+                </div>
               </div>
               <p className="text-sm font-semibold text-slate-700">
                 {artist.name}
@@ -110,7 +186,14 @@ export default function MusicProductionPage() {
               key={svc.name}
               className="group w-full max-w-55 rounded-2xl overflow-hidden border border-primary/20 shadow-sm"
             >
-              <div className="relative h-44 md:h-44">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveImage({ src: svc.image, alt: svc.name })
+                }
+                aria-label={`Preview ${svc.name}`}
+                className="relative h-44 md:h-44 w-full block cursor-zoom-in"
+              >
                 <Image
                   src={svc.image}
                   alt={svc.name}
@@ -118,7 +201,7 @@ export default function MusicProductionPage() {
                   sizes="(max-width:767px) 46vw, 220px"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-              </div>
+              </button>
               <div className="pt-3 h-12 flex items-start justify-center text-center">
                 <p className="text-sm font-semibold text-slate-700 text-center">
                   {svc.name}
@@ -156,6 +239,8 @@ export default function MusicProductionPage() {
           </a>
         </div>
       </section>
+
+      <ImageLightbox image={activeImage} onClose={() => setActiveImage(null)} />
     </IndustryPageLayout>
   );
 }

@@ -32,6 +32,23 @@ const FALLBACK_HERO_IMAGE = "/sample-hero.jpg";
 const MIN_ROW_IMAGE_COUNT = 6;
 const MOBILE_MAX_UNIQUE_IMAGES = 6;
 const DESKTOP_MAX_UNIQUE_IMAGES = 10;
+const HERO_SOCIALS = [
+  {
+    label: "Facebook",
+    href: "https://web.facebook.com/abkayp/",
+    icon: "/facebook.png",
+  },
+  {
+    label: "TikTok",
+    href: "https://www.tiktok.com/@ab.kay.production",
+    icon: "/tiktok.png",
+  },
+  {
+    label: "YouTube",
+    href: "https://www.youtube.com/channel/UCBT4yLKh7GPtwzr8WAdO0cw",
+    icon: "/youtube.png",
+  },
+];
 
 function getHeroImageFallbackUrl(url: string) {
   return url.endsWith(".webp") ? url.replace(/\.webp$/i, ".jpg") : url;
@@ -356,8 +373,30 @@ export default function Hero() {
   return (
     <section
       id="heroSection"
-      className=" bg-black h-screen w-full overflow-hidden"
+      className="relative bg-black h-screen w-full overflow-hidden"
     >
+      <div className="absolute right-3 md:right-5 top-1/2 -translate-y-1/2 z-30 pointer-events-none">
+        <div className="flex flex-col gap-2 rounded-2xl border border-white/15 bg-black/65 backdrop-blur-md p-2 shadow-2xl pointer-events-auto">
+          {HERO_SOCIALS.map((social) => (
+            <a
+              key={`hero-${social.label}`}
+              href={social.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={social.label}
+              className="opacity-85 hover:opacity-100 transition-opacity"
+            >
+              <Image
+                src={social.icon}
+                width={30}
+                height={30}
+                alt={social.label}
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+
       <div
         ref={containerRef}
         className="flex flex-col h-full justify-between gap-2 py-4 overflow-hidden"

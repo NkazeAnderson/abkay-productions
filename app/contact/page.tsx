@@ -4,6 +4,7 @@ import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Send, CheckCircle } from "lucide-react";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 const SOCIAL_LINKS = [
   {
@@ -332,12 +333,7 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/*  Footer  */}
-      <footer className="border-t border-white/8 py-8 px-6 text-center">
-        <p className="text-sm text-white/30">
-          © 2026 AB KAY Productions. All rights reserved.
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

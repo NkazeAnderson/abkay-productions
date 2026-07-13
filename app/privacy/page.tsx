@@ -1,4 +1,5 @@
 ﻿import Link from "next/link";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 const SECTIONS = [
   {
@@ -139,11 +140,7 @@ export default function PrivacyPage() {
         </div>
       </section>
 
-      <footer className="border-t border-white/8 py-8 px-6 text-center">
-        <p className="text-sm text-white/30">
-          © 2026 AB KAY Productions. All rights reserved.
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

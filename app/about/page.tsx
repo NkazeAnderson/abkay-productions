@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 const VALUES = [
   {
@@ -252,12 +253,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/*  Footer  */}
-      <footer className="border-t border-white/8 py-8 px-6 text-center">
-        <p className="text-sm text-white/30">
-          © 2026 AB KAY Productions. All rights reserved.
-        </p>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

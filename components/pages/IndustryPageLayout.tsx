@@ -6,6 +6,7 @@ import { type ReactNode, useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import { Button } from "@/components/ui/button";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import SiteFooter from "@/components/layout/SiteFooter";
 
 type IndustryPageLayoutProps = {
   title: string;
@@ -118,11 +119,7 @@ export default function IndustryPageLayout({
 
           {children}
 
-          <footer className="border-t border-primary/20 px-6 py-6 mt-16 text-center">
-            <p className="text-sm text-primary/50">
-              © 2026 AB KAY Productions. All rights reserved.
-            </p>
-          </footer>
+          <SiteFooter className="mt-16" />
         </div>
       </div>
 

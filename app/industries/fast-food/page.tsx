@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import IndustryPageLayout from "@/components/pages/IndustryPageLayout";
+import ImageLightbox from "@/components/ui/image-lightbox";
 
 const CHEFS = [
   {
@@ -63,6 +65,11 @@ const PRODUCTS = [
 const HALL_IMAGES = ["/ff1.jpg", "/ff2.jpg", "/ff3.jpg"];
 
 export default function FastFoodPage() {
+  const [activeImage, setActiveImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+
   return (
     <IndustryPageLayout title="Fast Food" videoSrc="/hero-video.mp4">
       {/* ── Intro ────────────────────────────────────────────────── */}
@@ -98,7 +105,17 @@ export default function FastFoodPage() {
               key={chef.name}
               className="w-full max-w-75 rounded-2xl border border-primary/20 overflow-hidden shadow-sm bg-white"
             >
-              <div className="relative h-48 md:h-52">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveImage({
+                    src: chef.image,
+                    alt: `${chef.name} portrait`,
+                  })
+                }
+                aria-label={`Preview ${chef.name}`}
+                className="relative h-48 md:h-52 w-full block cursor-zoom-in"
+              >
                 <Image
                   src={chef.image}
                   alt={chef.name}
@@ -106,7 +123,7 @@ export default function FastFoodPage() {
                   sizes="(max-width:639px) 92vw, (max-width:1023px) 47vw, 300px"
                   className="object-cover"
                 />
-              </div>
+              </button>
               <div className="p-4 space-y-2 text-center">
                 <p className="font-semibold text-slate-800">{chef.name}</p>
                 <p className="text-xs text-primary font-medium">
@@ -142,7 +159,14 @@ export default function FastFoodPage() {
               key={item.name}
               className="group w-full rounded-2xl overflow-hidden"
             >
-              <div className="relative h-40">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveImage({ src: item.image, alt: item.name })
+                }
+                aria-label={`Preview ${item.name}`}
+                className="relative h-40 w-full block cursor-zoom-in"
+              >
                 <Image
                   src={item.image}
                   alt={item.name}
@@ -150,7 +174,7 @@ export default function FastFoodPage() {
                   sizes="(max-width:767px) 50vw, 33vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-              </div>
+              </button>
               <div className="pt-3 h-12 flex items-start justify-center text-center">
                 <p className="text-sm font-bold text-slate-700">{item.name}</p>
               </div>
@@ -173,13 +197,18 @@ export default function FastFoodPage() {
             in.
           </p>
         </div>
-        <div className="columns-2 md:columns-3 gap-4 space-y-4">
+        <div className="md:columns-3 md:gap-4 space-y-4">
           {HALL_IMAGES.map((src, i) => (
-            <div
+            <button
+              type="button"
               key={i}
+              onClick={() =>
+                setActiveImage({ src, alt: `Hall image ${i + 1}` })
+              }
+              aria-label={`Preview hall image ${i + 1}`}
               className={`relative break-inside-avoid overflow-hidden rounded-2xl ${
                 i === 0 ? "h-72" : "h-52"
-              }`}
+              } w-full block cursor-zoom-in`}
             >
               <Image
                 src={src}
@@ -188,10 +217,12 @@ export default function FastFoodPage() {
                 sizes="(max-width:767px) 50vw, 33vw"
                 className="object-cover"
               />
-            </div>
+            </button>
           ))}
         </div>
       </section>
+
+      <ImageLightbox image={activeImage} onClose={() => setActiveImage(null)} />
     </IndustryPageLayout>
   );
 }

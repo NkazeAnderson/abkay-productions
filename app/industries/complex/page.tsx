@@ -1,7 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import IndustryPageLayout from "@/components/pages/IndustryPageLayout";
+import ImageLightbox from "@/components/ui/image-lightbox";
 
 const PRODUCTS = [
   {
@@ -51,6 +53,11 @@ const SPACE_IMAGES = [
 ];
 
 export default function ComplexPage() {
+  const [activeImage, setActiveImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+
   return (
     <IndustryPageLayout title="Complex" videoSrc="/hero-video.mp4">
       {/* ── Intro ────────────────────────────────────────────────── */}
@@ -83,7 +90,14 @@ export default function ComplexPage() {
             from the moment they arrive.
           </p>
         </div>
-        <div className="relative h-screen w-full md:w-3/4 lg:w-1/2  rounded-3xl overflow-hidden shadow-lg self-center mx-auto">
+        <button
+          type="button"
+          onClick={() =>
+            setActiveImage({ src: "/sales-girls.jpeg", alt: "Service team" })
+          }
+          aria-label="Preview service team"
+          className="relative h-screen w-full md:w-3/4 lg:w-1/2 rounded-3xl overflow-hidden shadow-lg self-center mx-auto block cursor-zoom-in"
+        >
           <Image
             src="/sales-girls.jpeg"
             alt="Service team"
@@ -93,7 +107,7 @@ export default function ComplexPage() {
             priority
           />
           <div className="absolute inset-0 bg-linear-to-t from-black/40 to-transparent" />
-        </div>
+        </button>
       </section>
 
       {/* ── Products ────────────────────────────────────────────── */}
@@ -110,7 +124,14 @@ export default function ComplexPage() {
               key={item.name}
               className="group w-full rounded-2xl overflow-hidden"
             >
-              <div className="relative h-36">
+              <button
+                type="button"
+                onClick={() =>
+                  setActiveImage({ src: item.image, alt: item.name })
+                }
+                aria-label={`Preview ${item.name}`}
+                className="relative h-36 w-full block cursor-zoom-in"
+              >
                 <Image
                   src={item.image}
                   alt={item.name}
@@ -118,7 +139,7 @@ export default function ComplexPage() {
                   sizes="(max-width:767px) 50vw, 25vw"
                   className="object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-              </div>
+              </button>
               <div className="pt-3 h-12 flex items-start justify-center text-center">
                 <p className="text-sm font-bold text-slate-700">{item.name}</p>
               </div>
@@ -141,13 +162,18 @@ export default function ComplexPage() {
             around you.
           </p>
         </div>
-        <div className="columns-2 md:columns-3 gap-4 space-y-4">
+        <div className="md:columns-3 md:gap-4 space-y-4">
           {SPACE_IMAGES.map((src, i) => (
-            <div
+            <button
+              type="button"
               key={i}
+              onClick={() =>
+                setActiveImage({ src, alt: `Space image ${i + 1}` })
+              }
+              aria-label={`Preview space image ${i + 1}`}
               className={`relative break-inside-avoid overflow-hidden rounded-2xl ${
                 i === 0 ? "h-72" : "h-52"
-              }`}
+              } w-full block cursor-zoom-in`}
             >
               <Image
                 src={src}
@@ -156,10 +182,12 @@ export default function ComplexPage() {
                 sizes="(max-width:767px) 50vw, 33vw"
                 className="object-cover"
               />
-            </div>
+            </button>
           ))}
         </div>
       </section>
+
+      <ImageLightbox image={activeImage} onClose={() => setActiveImage(null)} />
     </IndustryPageLayout>
   );
 }

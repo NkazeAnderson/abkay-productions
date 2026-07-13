@@ -1,12 +1,14 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Card } from "../ui/card";
 import { Images, Quote, Star } from "lucide-react";
 import { Button } from "../ui/button";
 import Hero from "../overlay/Hero";
 import { gsap, ScrollTrigger } from "@/lib/gsap";
+import ImageLightbox from "../ui/image-lightbox";
+import SiteFooter from "../layout/SiteFooter";
 
 type Industry = {
   name: string;
@@ -132,6 +134,11 @@ const GALLERY_ITEMS: GalleryItem[] = [
 ];
 
 function HomePage() {
+  const [activeImage, setActiveImage] = useState<{
+    src: string;
+    alt: string;
+  } | null>(null);
+
   useEffect(() => {
     // Scroll reveal — fade+slide sections in as they enter the viewport
     const sections = document.querySelectorAll<HTMLElement>(".reveal-section");
@@ -153,6 +160,26 @@ function HomePage() {
 
   useEffect(() => {
     if (window.innerWidth < 768) {
+      return;
+    }
+
+    const hasAnimated =
+      window.sessionStorage.getItem("abk-industry-slide-desktop-done") ===
+      "true";
+
+    if (hasAnimated) {
+      gsap.set(".industry-card-left", {
+        rotate: 0,
+        translateX: 0,
+      });
+      gsap.set(".industry-card-center", {
+        rotate: 0,
+        translateX: 0,
+      });
+      gsap.set(".industry-card-right", {
+        rotate: 0,
+        translateX: 0,
+      });
       return;
     }
 
@@ -183,6 +210,11 @@ function HomePage() {
               ease: "power4.out",
             });
 
+            window.sessionStorage.setItem(
+              "abk-industry-slide-desktop-done",
+              "true",
+            );
+
             observer.disconnect();
           }
         });
@@ -201,6 +233,15 @@ function HomePage() {
       return;
     }
 
+    const hasAnimated =
+      window.sessionStorage.getItem("abk-industry-slide-mobile-done") ===
+      "true";
+
+    if (hasAnimated) {
+      gsap.set(cards, { x: 0, opacity: 1, rotate: 0 });
+      return;
+    }
+
     cards.forEach((card) => {
       gsap.fromTo(
         card,
@@ -214,6 +255,12 @@ function HomePage() {
             trigger: card,
             start: "top 88%",
             once: true,
+            onEnter: () => {
+              window.sessionStorage.setItem(
+                "abk-industry-slide-mobile-done",
+                "true",
+              );
+            },
           },
         },
       );
@@ -329,7 +376,7 @@ function HomePage() {
           </div>
           <div className="space-y-4 max-w-2xl">
             <div>
-              <h2 className="mb-1">ABUBAKAR</h2>
+              <h2 className="mb-1">ABUBAKAR KAY</h2>
               <p className="text-xs tracking-[0.3em] font-semibold text-primary uppercase">
                 Founder &amp; CEO
               </p>
@@ -372,13 +419,16 @@ function HomePage() {
 
           <div className="columns-2 gap-4 space-y-4 md:columns-3 lg:columns-4">
             {GALLERY_ITEMS.map((item) => (
-              <div
+              <button
+                type="button"
                 key={item.src}
+                onClick={() => setActiveImage({ src: item.src, alt: item.alt })}
+                aria-label={`Preview ${item.alt}`}
                 className={`relative mb-4 break-inside-avoid bg-[#111] shadow-2xl overflow-hidden ${
                   item.large
                     ? "h-72 sm:h-80 md:h-108 rounded-2xl shadow-black/40"
                     : "h-44 sm:h-56 md:h-64 rounded-[1.6rem] shadow-black/30"
-                }`}
+                } w-full text-left cursor-zoom-in`}
               >
                 <Image
                   src={item.src}
@@ -389,7 +439,7 @@ function HomePage() {
                     item.large ? "rounded-2xl" : "rounded-[1.6rem]"
                   }`}
                 />
-              </div>
+              </button>
             ))}
           </div>
           <div className=" flex items-center justify-center">
@@ -470,57 +520,9 @@ function HomePage() {
         </div>
       </section>
 
-      <footer className="border-t border-white/10 bg-black/70 backdrop-blur-md px-6 md:px-10 py-6">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-4">
-            <Link
-              href={"#"}
-              aria-label="YouTube"
-              className="opacity-70 hover:opacity-100 transition-opacity"
-            >
-              <Image
-                src={"/youtube.png"}
-                width={32}
-                height={28}
-                alt="Youtube"
-              />
-            </Link>
-            <Link
-              href={"#"}
-              aria-label="Facebook"
-              className="opacity-70 hover:opacity-100 transition-opacity"
-            >
-              <Image
-                src={"/facebook.png"}
-                width={32}
-                height={28}
-                alt="FaceBook"
-              />
-            </Link>
-            <Link
-              href={"#"}
-              aria-label="TikTok"
-              className="opacity-70 hover:opacity-100 transition-opacity"
-            >
-              <Image src={"/tiktok.png"} width={32} height={28} alt="TikTok" />
-            </Link>
-          </div>
-          <p className="text-sm text-slate-500">
-            &copy; 2026 AB KAY Productions. All rights reserved.
-          </p>
-          <div className="flex items-center gap-5 text-sm text-slate-400">
-            <Link href={"#"} className="hover:text-white transition-colors">
-              Blogs
-            </Link>
-            <Link href={"#"} className="hover:text-white transition-colors">
-              Contact Us
-            </Link>
-            <Link href={"#"} className="hover:text-white transition-colors">
-              Privacy
-            </Link>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
+
+      <ImageLightbox image={activeImage} onClose={() => setActiveImage(null)} />
     </main>
   );
 }
