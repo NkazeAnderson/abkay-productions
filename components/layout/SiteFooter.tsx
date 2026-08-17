@@ -52,7 +52,7 @@ export default function SiteFooter({ className = "" }: SiteFooterProps) {
           &copy; 2026 AB KAY Productions. All rights reserved.
         </p>
         <div className="flex items-center gap-4 text-xs text-slate-400">
-          <Link href="#" className="hover:text-white transition-colors">
+          <Link href="/blog" className="hover:text-white transition-colors">
             Blogs
           </Link>
           <Link href="/contact" className="hover:text-white transition-colors">

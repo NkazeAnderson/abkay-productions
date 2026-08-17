@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 import { type ReactNode, useRef } from "react";
@@ -11,6 +12,11 @@ import SiteFooter from "@/components/layout/SiteFooter";
 type IndustryPageLayoutProps = {
   title: string;
   videoSrc?: string;
+  imageSrc?: string;
+  imageAlt?: string;
+  sidebarLabel?: string;
+  backHref?: string;
+  backLabel?: string;
   children: ReactNode;
   whatsappNumber?: string;
 };
@@ -18,6 +24,11 @@ type IndustryPageLayoutProps = {
 export default function IndustryPageLayout({
   title,
   videoSrc = "/hero-video.mp4",
+  imageSrc,
+  imageAlt,
+  sidebarLabel = title,
+  backHref = "/#industries",
+  backLabel = "Back to Industries",
   children,
   whatsappNumber = "237654894282",
 }: IndustryPageLayoutProps) {
@@ -78,23 +89,34 @@ export default function IndustryPageLayout({
           className="font-heading text-white font-bold uppercase tracking-[0.38em] text-base md:text-lg whitespace-nowrap"
           style={{ writingMode: "vertical-rl" }}
         >
-          {title}
+          {sidebarLabel}
         </span>
       </div>
 
       {/* ── Content area offset by the left bar ──────────────────────── */}
       <div className="ml-14 md:ml-16 flex-1 min-w-0">
-        {/* Fixed background video — 30vh, sits behind scrollable content */}
+        {/* Fixed background media — 30vh, sits behind scrollable content */}
         <div className="fixed top-0 left-14 md:left-16 right-0 h-[30vh] z-10 overflow-hidden">
-          <video
-            className="w-full h-full object-cover"
-            src={videoSrc}
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="auto"
-          />
+          {imageSrc ? (
+            <Image
+              src={imageSrc}
+              alt={imageAlt ?? title}
+              fill
+              priority
+              sizes="100vw"
+              className="object-cover"
+            />
+          ) : (
+            <video
+              className="w-full h-full object-cover"
+              src={videoSrc}
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="auto"
+            />
+          )}
           <div className="absolute inset-0 bg-black/30" />
         </div>
 
@@ -105,14 +127,14 @@ export default function IndustryPageLayout({
         >
           {/* Back nav */}
           <div className="px-6 md:px-12 pt-4 pb-0.5">
-            <Link href="/#industries">
+            <Link href={backHref}>
               <Button
                 variant="ghost"
                 size="sm"
                 className="h-8 gap-1.5 px-2 text-xs text-primary hover:text-primary/80 -ml-2"
               >
                 <ArrowLeft size={12} />
-                Back to Industries
+                {backLabel}
               </Button>
             </Link>
           </div>

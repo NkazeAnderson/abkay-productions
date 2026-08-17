@@ -223,7 +223,7 @@ function AnimatedAssets() {
         ref={modelGroupRef}
         position={[centerPose.x, centerPose.y, centerPose.z]}
       >
-        <Environment preset="sunset" />
+        <Environment files="/hdri/venice_sunset_1k.hdr" />
         <pointLight position={[2, 2, 4]} intensity={2.2} color="#fff2dc" />
         <pointLight position={[-3, 1, -3]} intensity={1.1} color="#8eb7ff" />
         <spotLight

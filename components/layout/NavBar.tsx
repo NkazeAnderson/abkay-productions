@@ -11,6 +11,7 @@ import LanguageToggle from "./LanguageToggle";
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
+  { label: "Blog", href: "/blog" },
   { label: "Contact Us", href: "/contact" },
   { label: "Privacy", href: "/privacy" },
 ];
