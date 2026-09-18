@@ -1,8 +1,60 @@
 import type { Blog } from "@/types/blog";
 
 const MEDIA_BASE = "/blogs-media/wimbum-cultural-gala-2026";
+const RECAP_MEDIA_BASE = "/blogs-media/wimbum-cultural-gala-2026-recap";
 
 export const BLOGS: Blog[] = [
+  {
+    id: "wimbum-cultural-gala-2026-recap",
+    title: "A Night to Remember: The Wimbum Cultural Evening & Fundraiser Gala Recap",
+    description:
+      "The Wimbum Cultural Evening & Fundraiser Gala in Toronto was a resounding success. Relive the highlights with AB KAY artists Lexy and Mukolah MKL through exclusive photos and videos from the night.",
+    image: `${RECAP_MEDIA_BASE}/photo-1.jpeg`,
+    category: "Live Events",
+    author: "AB KAY Productions",
+    date: "2026-09-10",
+    readTime: "4 min read",
+    sections: [
+      {
+        id: "a-night-to-remember",
+        heading: "A Night to Remember",
+        paragraphs: [
+          "On September 5th, Toronto's 55 Guided Court was transformed into a slice of home for the Wimbum community and friends from across North America. The Wimbum Cultural Evening & Fundraiser Gala, presented by Wimbum Canada, delivered exactly what it promised: culture, music, and a room full of people celebrating where they come from.",
+          "AB KAY Music Production was proud to be part of that success, and the energy in the room made it clear that the gala did more than raise funds, it brought a community closer together.",
+        ],
+      },
+      {
+        id: "the-highlights",
+        heading: "The Highlights",
+        paragraphs: [
+          "Guests arrived dressed in their finest soirée attire, and the night unfolded with dinner, dance, and performances that kept the dance floor full from the first song to the last. Lexy and Mukolah MKL brought the sound of home across the Atlantic, and the crowd's reaction said it all, this was the kind of night the Wimbum community had been waiting for.",
+        ],
+        media: [
+          { type: "image", src: `${RECAP_MEDIA_BASE}/photo-1.jpeg`, alt: "Guests at the Wimbum Cultural Evening & Fundraiser Gala" },
+          { type: "image", src: `${RECAP_MEDIA_BASE}/photo-2.jpeg`, alt: "Wimbum Cultural Evening & Fundraiser Gala celebration" },
+        ],
+      },
+      {
+        id: "on-stage",
+        heading: "AB KAY On Stage",
+        paragraphs: [
+          "Lexy and Mukolah MKL each delivered performances that carried the spirit of the North West Region straight to Etobicoke, giving the community a genuine taste of home and reminding everyone in the room why nights like this matter.",
+        ],
+        media: [
+          { type: "video", src: `${RECAP_MEDIA_BASE}/video-1.mp4`, alt: "Performance recap from the Wimbum Cultural Evening & Fundraiser Gala" },
+          { type: "video", src: `${RECAP_MEDIA_BASE}/video-2.mp4`, alt: "Performance recap from the Wimbum Cultural Evening & Fundraiser Gala" },
+        ],
+      },
+      {
+        id: "a-shared-success",
+        heading: "A Shared Success",
+        paragraphs: [
+          "Every ticket sold and every dollar raised goes back into Wimbum Canada's mandate, keeping the association's cultural dances, gala nights, and community gatherings alive for the next generation. Judging by the turnout and the energy on the night, that mandate is in good hands.",
+          "AB KAY Music Production is grateful to have shared the stage with Lexy and Mukolah MKL, and even more grateful to Wimbum Canada for the invitation to be part of something this meaningful. Here's to the next gathering, and the next chance to celebrate home away from home.",
+        ],
+      },
+    ],
+  },
   {
     id: "wimbum-cultural-gala-2026",
     title: "AB KAY Music Takes the Stage at the Wimbum Cultural Evening & Fundraiser Gala",
