@@ -13,6 +13,7 @@ type HeroImageItemProps = {
 
 const HERO_IMAGE_URLS = [
   "/hero/hero_00.jpeg",
+  "/hero/hero_14.webp",
   "/hero/hero_01.webp",
   "/hero/hero_02.webp",
   "/hero/hero_03.webp",

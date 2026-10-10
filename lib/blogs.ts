@@ -3,7 +3,73 @@ import type { Blog } from "@/types/blog";
 const MEDIA_BASE = "/blogs-media/wimbum-cultural-gala-2026";
 const RECAP_MEDIA_BASE = "/blogs-media/wimbum-cultural-gala-2026-recap";
 
+const OKEN_MEDIA_BASE = "/blogs-media/oken-signing";
+
 export const BLOGS: Blog[] = [
+  {
+    id: "oken-signs-with-ab-kay-production",
+    title: "Welcome to the Family: Oken Signs with AB KAY Production",
+    description:
+      "AB KAY Production is proud to announce the signing of Oken, a gifted artist whose talent, consistency, and love for music had him dropping the hit single \"Aishia\" almost immediately after joining the label.",
+    image: `${OKEN_MEDIA_BASE}/signing-1.png`,
+    category: "Artist News",
+    author: "AB KAY Productions",
+    date: "2026-10-10",
+    readTime: "4 min read",
+    sections: [
+      {
+        id: "a-new-chapter",
+        heading: "A New Chapter for AB KAY",
+        paragraphs: [
+          "AB KAY Production is thrilled to officially welcome Oken to the family. His signing marks an exciting new chapter for the label, and a powerful addition to a roster already built on passion, hard work, and a love for authentic sound.",
+          "From the first conversation, it was clear that Oken is not just another voice, he is an artist with vision, discipline, and a presence that demands attention.",
+        ],
+        media: [
+          { type: "image", src: `${OKEN_MEDIA_BASE}/signing-1.png`, alt: "Oken at his signing with the AB KAY Production team" },
+          { type: "image", src: `${OKEN_MEDIA_BASE}/signing-2.png`, alt: "Oken with the AB KAY Production team after signing" },
+        ],
+      },
+      {
+        id: "talent-and-skill",
+        heading: "Talent That Speaks for Itself",
+        paragraphs: [
+          "Oken brings a rare mix of raw talent and polished craft. His voice carries emotion and confidence, his songwriting is sharp and memorable, and his stage presence shows an artist who understands how to connect with an audience, whether in a studio booth or in front of a crowd.",
+          "Equally striking is his style. Oken has a strong sense of identity, proudly rooted in culture and unmistakably his own, and it shows in everything he puts out, from the sound to the visuals.",
+        ],
+        media: [
+          { type: "image", src: "/oken-artist.jpeg", alt: "Oken, AB KAY Production artist", tall: true },
+          { type: "video", src: `${OKEN_MEDIA_BASE}/video-1.mp4`, alt: "Oken at AB KAY Production", tall: true },
+        ],
+      },
+      {
+        id: "consistency-and-love-for-music",
+        heading: "Consistency and a Genuine Love for Music",
+        paragraphs: [
+          "What truly sets Oken apart is his consistency. He shows up, he puts in the work, and he treats every session like it matters. That kind of dedication cannot be taught, and it comes from one place, a genuine love for music.",
+          "That love was on full display right after the signing. Without waiting or slowing down, Oken went straight into action and delivered a brand-new single, proving that his commitment is as strong as his talent.",
+        ],
+      },
+      {
+        id: "aishia",
+        heading: "\"Aishia\": A Hit Out of the Gate",
+        paragraphs: [
+          "That single is \"Aishia\", and it has quickly become a hit. Smooth, catchy, and full of heart, the song captures everything that makes Oken special and shows exactly why AB KAY Production was eager to bring him on board.",
+          "If you haven't heard it yet, watch the official video below and hear it for yourself.",
+        ],
+        media: [
+          { type: "youtube", src: "UJSLbnQpac4", alt: "Oken - Aishia (official video)" },
+        ],
+      },
+      {
+        id: "whats-next",
+        heading: "What's Next",
+        paragraphs: [
+          "This is only the beginning. With Oken on board, AB KAY Production is excited about what is ahead: more music, more visuals, and more moments for fans to share.",
+          "Follow Oken on Instagram (@oken_official), Facebook (OkenOfficial), and TikTok (@okensong) to stay up to date, and welcome him to the AB KAY family.",
+        ],
+      },
+    ],
+  },
   {
     id: "wimbum-cultural-gala-2026-recap",
     title: "A Night to Remember: The Wimbum Cultural Evening & Fundraiser Gala Recap",

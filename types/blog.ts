@@ -1,8 +1,10 @@
 export type BlogMediaItem = {
-  type: "image" | "video";
+  type: "image" | "video" | "youtube";
   src: string;
   alt: string;
   caption?: string;
+  /** Render as a tall 9:16 tile instead of the default landscape crop. */
+  tall?: boolean;
 };
 
 export type BlogSection = {

@@ -56,6 +56,24 @@ const ARTISTS = [
       },
     ] as ArtistSocial[],
   },
+  {
+    name: "Oken",
+    image: "/oken-artist.jpeg",
+    socials: [
+      {
+        label: "Facebook",
+        href: "https://web.facebook.com/OkenOfficial",
+      },
+      {
+        label: "Instagram",
+        href: "https://www.instagram.com/oken_official/",
+      },
+      {
+        label: "TikTok",
+        href: "https://www.tiktok.com/@okensong",
+      },
+    ] as ArtistSocial[],
+  },
 ];
 
 const SERVICES = [

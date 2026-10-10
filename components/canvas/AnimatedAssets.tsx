@@ -5,6 +5,7 @@ import {
   ContactShadows,
   Environment,
   Float,
+  Lightformer,
 } from "@react-three/drei";
 import { useThree } from "@react-three/fiber";
 import React, { Suspense, useRef } from "react";
@@ -223,7 +224,55 @@ function AnimatedAssets() {
         ref={modelGroupRef}
         position={[centerPose.x, centerPose.y, centerPose.z]}
       >
-        <Environment files="/hdri/venice_sunset_1k.hdr" />
+        {/* Procedural studio environment: reflections/fill with no file download */}
+        <Environment resolution={256} frames={1}>
+          <color attach="background" args={["#0b0b10"]} />
+          {/* warm key softbox */}
+          <Lightformer
+            form="rect"
+            intensity={4}
+            color="#ffe3c0"
+            position={[-4, 5, 4]}
+            scale={[6, 4, 1]}
+            onUpdate={(self) => self.lookAt(0, 0, 0)}
+          />
+          {/* cool rim strips */}
+          <Lightformer
+            form="rect"
+            intensity={3}
+            color="#8eb7ff"
+            position={[5, 1, -4]}
+            scale={[1.5, 8, 1]}
+            onUpdate={(self) => self.lookAt(0, 0, 0)}
+          />
+          <Lightformer
+            form="rect"
+            intensity={2.5}
+            color="#ffffff"
+            position={[-5, 0, -3]}
+            scale={[1.5, 8, 1]}
+            onUpdate={(self) => self.lookAt(0, 0, 0)}
+          />
+          {/* overhead ring for soft top highlights */}
+          <Lightformer
+            form="ring"
+            intensity={2}
+            color="#ffffff"
+            position={[0, 7, 0]}
+            scale={8}
+            onUpdate={(self) => self.lookAt(0, 0, 0)}
+          />
+          {/* low fill so the underside isn't black */}
+          <Lightformer
+            form="rect"
+            intensity={1.2}
+            color="#ffd9b0"
+            position={[0, -4, 4]}
+            scale={[8, 2, 1]}
+            onUpdate={(self) => self.lookAt(0, 0, 0)}
+          />
+        </Environment>
+        <ambientLight intensity={0.35} />
         <pointLight position={[2, 2, 4]} intensity={2.2} color="#fff2dc" />
         <pointLight position={[-3, 1, -3]} intensity={1.1} color="#8eb7ff" />
         <spotLight

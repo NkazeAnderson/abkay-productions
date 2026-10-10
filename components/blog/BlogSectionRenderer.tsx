@@ -46,7 +46,9 @@ export default function BlogSectionRenderer({
               key={`${section.id}-media-${i}`}
               className="space-y-1.5"
               style={
-                section.media!.length === 1 ? { gridColumn: "1 / -1" } : undefined
+                section.media!.length === 1 || item.type === "youtube"
+                  ? { gridColumn: "1 / -1" }
+                  : undefined
               }
             >
               {item.type === "image" ? (
@@ -54,7 +56,9 @@ export default function BlogSectionRenderer({
                   type="button"
                   onClick={() => onPreviewImage({ src: item.src, alt: item.alt })}
                   aria-label={`Preview ${item.alt}`}
-                  className="group relative block h-56 md:h-64 w-full overflow-hidden rounded-2xl shadow-sm cursor-zoom-in"
+                  className={`group relative block w-full overflow-hidden rounded-2xl shadow-sm cursor-zoom-in ${
+                    item.tall ? "aspect-[9/16]" : "h-56 md:h-64"
+                  }`}
                 >
                   <Image
                     src={item.src}
@@ -64,9 +68,20 @@ export default function BlogSectionRenderer({
                     className="object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </button>
+              ) : item.type === "youtube" ? (
+                <iframe
+                  className="aspect-video w-full rounded-2xl shadow-sm"
+                  src={`https://www.youtube.com/embed/${item.src}`}
+                  title={item.alt}
+                  loading="lazy"
+                  allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
               ) : (
                 <video
-                  className="h-56 md:h-64 w-full rounded-2xl object-cover shadow-sm"
+                  className={`w-full rounded-2xl object-cover shadow-sm ${
+                    item.tall ? "aspect-[9/16]" : "h-56 md:h-64"
+                  }`}
                   src={item.src}
                   controls
                   muted
