@@ -10,17 +10,17 @@ const SOCIAL_LINKS = [
   {
     label: "Facebook",
     href: "https://web.facebook.com/abkayp/",
-    icon: "/facebook.png",
+    icon: "/facebook.webp",
   },
   {
     label: "TikTok",
     href: "https://www.tiktok.com/@ab.kay.production",
-    icon: "/tiktok.png",
+    icon: "/tiktok.webp",
   },
   {
     label: "YouTube",
     href: "https://www.youtube.com/channel/UCBT4yLKh7GPtwzr8WAdO0cw",
-    icon: "/youtube.png",
+    icon: "/youtube.webp",
   },
 ];
 

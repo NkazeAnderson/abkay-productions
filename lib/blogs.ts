@@ -37,7 +37,7 @@ export const BLOGS: Blog[] = [
           "Equally striking is his style. Oken has a strong sense of identity, proudly rooted in culture and unmistakably his own, and it shows in everything he puts out, from the sound to the visuals.",
         ],
         media: [
-          { type: "image", src: "/oken-artist.jpeg", alt: "Oken, AB KAY Production artist", tall: true },
+          { type: "image", src: "/oken-artist.webp", alt: "Oken, AB KAY Production artist", tall: true },
           { type: "video", src: `${OKEN_MEDIA_BASE}/video-1.mp4`, alt: "Oken at AB KAY Production", tall: true },
         ],
       },
@@ -186,7 +186,7 @@ export const BLOGS: Blog[] = [
               "Lexy is a Cameroonian Afro-pop, R&B, and Afro-njang singer, songwriter, and entertainer whose sound is rooted in the North West Region of Cameroon, the very region the Wimbum people call home. She brings that same regional pride to every performance, making her a natural fit for a night built around culture and connection.",
             ],
             media: [
-              { type: "image", src: "/Lexy-artist.jpeg", alt: "Lexy, AB KAY guest artist" },
+              { type: "image", src: "/Lexy-artist.webp", alt: "Lexy, AB KAY guest artist" },
             ],
           },
           {
@@ -196,7 +196,7 @@ export const BLOGS: Blog[] = [
               "Mukolah MKL is one of AB KAY's own, a rising voice from the studio who has built a growing following across Facebook, TikTok, and YouTube. He joins the gala as a guest artist ready to add his own energy to the night's celebration.",
             ],
             media: [
-              { type: "image", src: "/Mukolah-artist.jpeg", alt: "Mukolah MKL, AB KAY guest artist" },
+              { type: "image", src: "/Mukolah-artist.webp", alt: "Mukolah MKL, AB KAY guest artist" },
             ],
           },
         ],

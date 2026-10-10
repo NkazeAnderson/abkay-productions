@@ -6,6 +6,12 @@ import RegisterGsapPlugins from "@/components/RegisterGsapPlugins";
 import NavBar from "@/components/layout/NavBar";
 import LoadingScreen from "@/components/LoadingScreen";
 import SmoothScrollProvider from "@/components/SmoothScrollProvider";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+} from "@/lib/seo";
 
 const geistSans = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
@@ -20,8 +26,64 @@ const noto = Noto_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "AB Kay Productions",
-  description: "Where life meets entertainment",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: `${SITE_NAME} | Music Production, Fast Food & Entertainment in Douala`,
+    template: `%s | ${SITE_NAME}`,
+  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  keywords: [
+    "AB KAY Productions",
+    "AB KAY Music Production",
+    "music production Cameroon",
+    "recording studio Douala",
+    "Cameroonian artists",
+    "AB KAY Fast Food",
+    "AB KAY Complex",
+    "Douala entertainment",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    siteName: SITE_NAME,
+    title: `${SITE_NAME} | Entertainment At It's Best`,
+    description: SITE_DESCRIPTION,
+    url: "/",
+    locale: "en_US",
+    images: [{ url: DEFAULT_OG_IMAGE, alt: SITE_NAME }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE_NAME,
+    description: SITE_DESCRIPTION,
+    images: [DEFAULT_OG_IMAGE],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+  },
+};
+
+const ORGANIZATION_JSON_LD = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: SITE_NAME,
+  url: SITE_URL,
+  logo: `${SITE_URL}${DEFAULT_OG_IMAGE}`,
+  description: SITE_DESCRIPTION,
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: "Carrefour Matango, Japoma",
+    addressLocality: "Douala",
+    addressCountry: "CM",
+  },
+  telephone: "+237654894282",
+  sameAs: [
+    "https://web.facebook.com/abkayp/",
+    "https://www.tiktok.com/@ab.kay.production",
+  ],
 };
 
 export default function RootLayout({
@@ -36,6 +98,12 @@ export default function RootLayout({
     >
       <RegisterGsapPlugins />
       <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(ORGANIZATION_JSON_LD),
+          }}
+        />
         <SmoothScrollProvider>
           <LoadingScreen />
           <NavBar />

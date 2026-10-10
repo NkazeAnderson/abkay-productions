@@ -9,7 +9,7 @@ const CHEFS = [
   {
     name: "Chef Ice",
     years: 8,
-    image: "/ice.png",
+    image: "/ice.webp",
     tags: ["Pizza", "Coffee", "Burgers"],
   },
 ];
@@ -62,7 +62,7 @@ const PRODUCTS = [
   },
 ];
 
-const HALL_IMAGES = ["/ff1.jpg", "/ff2.jpg", "/ff3.jpg"];
+const HALL_IMAGES = ["/ff1.webp", "/ff2.webp", "/ff3.webp"];
 
 export default function FastFoodPage() {
   const [activeImage, setActiveImage] = useState<{

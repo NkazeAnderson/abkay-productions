@@ -39,7 +39,7 @@ export default function LoadingScreen() {
       }`}
     >
       <div className="relative w-24 h-24 animate-pulse">
-        <Image src="/logo.png" alt="AB KAY" fill className="object-contain" />
+        <Image src="/logo.webp" alt="AB KAY" fill className="object-contain" />
       </div>
       <div className="text-center space-y-1">
         <p className="text-2xl font-heading font-bold text-white tracking-widest uppercase">

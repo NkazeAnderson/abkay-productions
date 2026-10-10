@@ -1,4 +1,6 @@
-﻿import Link from "next/link";
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
+import Link from "next/link";
 import SiteFooter from "@/components/layout/SiteFooter";
 
 const SECTIONS = [
@@ -77,6 +79,13 @@ To exercise any of these rights, contact us via WhatsApp or our contact form.`,
  Location: Carrefour Matango, Japoma, Douala, Cameroon`,
   },
 ];
+
+export const metadata: Metadata = buildMetadata({
+  title: "Privacy Policy",
+  description:
+    "How AB KAY Productions collects, uses and protects your information across our website and services.",
+  path: "/privacy",
+});
 
 export default function PrivacyPage() {
   return (

@@ -89,7 +89,7 @@ export default function NavBar() {
           <div id="logoAndName" className="relative pointer-events-auto">
             <Link href="/" className="flex gap-2 items-center">
               <div className="relative w-16 aspect-square rounded-full bg-black p-1.5">
-                <Image src="/logo.png" alt="AB KAY Logo" fill />
+                <Image src="/logo.webp" alt="AB KAY Logo" fill />
               </div>
               <span
                 id="CompanyName"

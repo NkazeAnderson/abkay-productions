@@ -13,16 +13,16 @@ type ArtistSocial = {
 };
 
 const SOCIAL_ICON_MAP: Record<string, string> = {
-  Facebook: "/facebook.png",
-  Instagram: "/Instagram.png",
-  TikTok: "/tiktok.png",
-  YouTube: "/youtube.png",
+  Facebook: "/facebook.webp",
+  Instagram: "/Instagram.webp",
+  TikTok: "/tiktok.webp",
+  YouTube: "/youtube.webp",
 };
 
 const ARTISTS = [
   {
     name: "Lexy",
-    image: "/Lexy-artist.jpeg",
+    image: "/Lexy-artist.webp",
     socials: [
       {
         label: "Facebook",
@@ -40,7 +40,7 @@ const ARTISTS = [
   },
   {
     name: "Mukolah",
-    image: "/Mukolah-artist.jpeg",
+    image: "/Mukolah-artist.webp",
     socials: [
       {
         label: "Facebook",
@@ -58,7 +58,7 @@ const ARTISTS = [
   },
   {
     name: "Oken",
-    image: "/oken-artist.jpeg",
+    image: "/oken-artist.webp",
     socials: [
       {
         label: "Facebook",
@@ -79,19 +79,19 @@ const ARTISTS = [
 const SERVICES = [
   {
     name: "Studio Recording",
-    image: "/music-recording.jpg",
+    image: "/music-recording.webp",
   },
   {
     name: "Mixing & Mastering",
-    image: "/music-mixing.jpg",
+    image: "/music-mixing.webp",
   },
   {
     name: "Music Video",
-    image: "/video-production.jpg",
+    image: "/video-production.webp",
   },
   {
     name: "Beat Production",
-    image: "/beat-production.jpg",
+    image: "/beat-production.webp",
   },
 ];
 

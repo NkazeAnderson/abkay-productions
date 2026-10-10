@@ -8,15 +8,15 @@ import ImageLightbox from "@/components/ui/image-lightbox";
 const PRODUCTS = [
   {
     name: "Whiskey",
-    image: "/complex-products/whisky.jpg",
+    image: "/complex-products/whisky.webp",
   },
   {
     name: "Wine",
-    image: "/complex-products/wine.jpg",
+    image: "/complex-products/wine.webp",
   },
   {
     name: "Beer",
-    image: "/complex-products/beer.jpg",
+    image: "/complex-products/beer.webp",
   },
   {
     name: "Sweet Juice",
@@ -25,31 +25,31 @@ const PRODUCTS = [
   },
   {
     name: "Roasted Fish",
-    image: "/complex-products/fish.jpg",
+    image: "/complex-products/fish.webp",
   },
   {
     name: "Roasted Beef",
-    image: "/complex-products/soya.jpg",
+    image: "/complex-products/soya.webp",
   },
   {
     name: "Roasted Chicken",
-    image: "/complex-products/chicken.jpg",
+    image: "/complex-products/chicken.webp",
   },
   {
     name: "African Food Sample",
-    image: "/complex-products/af1.jpg",
+    image: "/complex-products/af1.webp",
   },
   {
     name: "African Food Sample",
-    image: "/complex-products/af2.jpg",
+    image: "/complex-products/af2.webp",
   },
 ];
 
 const SPACE_IMAGES = [
-  "/complex1.jpg",
-  "/complex2.jpg",
-  "/complex3.jpg",
-  "/complex4.jpg",
+  "/complex1.webp",
+  "/complex2.webp",
+  "/complex3.webp",
+  "/complex4.webp",
 ];
 
 export default function ComplexPage() {
@@ -93,13 +93,13 @@ export default function ComplexPage() {
         <button
           type="button"
           onClick={() =>
-            setActiveImage({ src: "/sales-girls.jpeg", alt: "Service team" })
+            setActiveImage({ src: "/sales-girls.webp", alt: "Service team" })
           }
           aria-label="Preview service team"
           className="relative h-screen w-full md:w-3/4 lg:w-1/2 rounded-3xl overflow-hidden shadow-lg self-center mx-auto block cursor-zoom-in"
         >
           <Image
-            src="/sales-girls.jpeg"
+            src="/sales-girls.webp"
             alt="Service team"
             fill
             sizes="100vw"

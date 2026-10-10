@@ -12,7 +12,7 @@ type HeroImageItemProps = {
 };
 
 const HERO_IMAGE_URLS = [
-  "/hero/hero_00.jpeg",
+  "/hero/hero_00.webp",
   "/hero/hero_14.webp",
   "/hero/hero_01.webp",
   "/hero/hero_02.webp",
@@ -29,7 +29,7 @@ const HERO_IMAGE_URLS = [
   "/hero/hero_13.webp",
 ];
 
-const FALLBACK_HERO_IMAGE = "/sample-hero.jpg";
+const FALLBACK_HERO_IMAGE = "/sample-hero.webp";
 const MIN_ROW_IMAGE_COUNT = 6;
 const MOBILE_MAX_UNIQUE_IMAGES = 6;
 const DESKTOP_MAX_UNIQUE_IMAGES = 10;
@@ -37,21 +37,22 @@ const HERO_SOCIALS = [
   {
     label: "Facebook",
     href: "https://web.facebook.com/abkayp/",
-    icon: "/facebook.png",
+    icon: "/facebook.webp",
   },
   {
     label: "TikTok",
     href: "https://www.tiktok.com/@ab.kay.production",
-    icon: "/tiktok.png",
+    icon: "/tiktok.webp",
   },
   {
     label: "YouTube",
     href: "https://www.youtube.com/channel/UCBT4yLKh7GPtwzr8WAdO0cw",
-    icon: "/youtube.png",
+    icon: "/youtube.webp",
   },
 ];
 
 function getHeroImageFallbackUrl(url: string) {
+  if (url === "/hero/hero_00.webp") return "/hero/hero_00.jpeg";
   return url.endsWith(".webp") ? url.replace(/\.webp$/i, ".jpg") : url;
 }
 

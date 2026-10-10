@@ -80,9 +80,9 @@ const TESTIMONIALS: Testimonial[] = [
 ];
 
 const PARTNER_LOGOS = [
-  { src: "/partners/Boissons_du_Cameroun.png", alt: "Boissons du Cameroun" },
-  { src: "/partners/Guiness.png", alt: "Guinness" },
-  { src: "/partners/UCB.png", alt: "UCB" },
+  { src: "/partners/Boissons_du_Cameroun.webp", alt: "Boissons du Cameroun" },
+  { src: "/partners/Guiness.webp", alt: "Guinness" },
+  { src: "/partners/UCB.webp", alt: "UCB" },
 ];
 
 type GalleryItem = {

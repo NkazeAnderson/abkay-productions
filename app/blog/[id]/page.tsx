@@ -1,78 +1,68 @@
-"use client";
+import type { Metadata } from "next";
+import { notFound } from "next/navigation";
+import BlogPostView from "@/components/blog/BlogPostView";
+import { BLOGS, getBlogById } from "@/lib/blogs";
+import { buildMetadata, SITE_NAME, SITE_URL } from "@/lib/seo";
 
-import { useState } from "react";
-import { notFound, useParams } from "next/navigation";
-import { CalendarDays, Clock, User } from "lucide-react";
-import IndustryPageLayout from "@/components/pages/IndustryPageLayout";
-import BlogSectionRenderer from "@/components/blog/BlogSectionRenderer";
-import ImageLightbox from "@/components/ui/image-lightbox";
-import { getBlogById } from "@/lib/blogs";
+type BlogPostPageProps = {
+  params: Promise<{ id: string }>;
+};
 
-function formatDate(dateString: string) {
-  return new Date(dateString).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
+// Pre-render every blog post at build time instead of on request.
+export function generateStaticParams() {
+  return BLOGS.map((blog) => ({ id: blog.id }));
+}
+
+export const dynamicParams = false;
+
+export async function generateMetadata({
+  params,
+}: BlogPostPageProps): Promise<Metadata> {
+  const { id } = await params;
+  const blog = getBlogById(id);
+  if (!blog) return {};
+  return buildMetadata({
+    title: blog.title,
+    description: blog.description,
+    path: `/blog/${blog.id}`,
+    image: blog.image,
+    type: "article",
+    publishedTime: blog.date,
   });
 }
 
-export default function BlogPostPage() {
-  const params = useParams<{ id: string }>();
-  const [activeImage, setActiveImage] = useState<{
-    src: string;
-    alt: string;
-  } | null>(null);
-
-  const blog = getBlogById(params.id);
+export default async function BlogPostPage({ params }: BlogPostPageProps) {
+  const { id } = await params;
+  const blog = getBlogById(id);
 
   if (!blog) {
     notFound();
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: blog.title,
+    description: blog.description,
+    image: `${SITE_URL}${blog.image}`,
+    datePublished: blog.date,
+    dateModified: blog.date,
+    author: { "@type": "Organization", name: blog.author },
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: { "@type": "ImageObject", url: `${SITE_URL}/logo.png` },
+    },
+    mainEntityOfPage: `${SITE_URL}/blog/${blog.id}`,
+  };
+
   return (
-    <IndustryPageLayout
-      title={blog.title}
-      imageSrc={blog.image}
-      imageAlt={blog.title}
-      sidebarLabel="Blog"
-      backHref="/blog"
-      backLabel="Back to Blog"
-    >
-      {/* ── Intro ────────────────────────────────────────────────── */}
-      <section className="px-6 md:px-14 py-10 space-y-4 max-w-3xl mx-auto">
-        <p className="text-xs tracking-[0.35em] text-primary font-semibold uppercase">
-          {blog.category}
-        </p>
-        <h1 className="text-4xl md:text-5xl font-bold text-yellow-800 leading-tight">
-          {blog.title}
-        </h1>
-        <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 font-medium">
-          <span className="flex items-center gap-1.5">
-            <User size={13} />
-            {blog.author}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <CalendarDays size={13} />
-            {formatDate(blog.date)}
-          </span>
-          <span className="flex items-center gap-1.5">
-            <Clock size={13} />
-            {blog.readTime}
-          </span>
-        </div>
-        <p className="text-slate-600 leading-8 text-lg">{blog.description}</p>
-      </section>
-
-      {/* ── Recursive content sections ─────────────────────────────── */}
-      {blog.sections.map((section) => (
-        <BlogSectionRenderer
-          key={section.id}
-          section={section}
-          onPreviewImage={setActiveImage}
-        />
-      ))}
-
-      <ImageLightbox image={activeImage} onClose={() => setActiveImage(null)} />
-    </IndustryPageLayout>
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <BlogPostView blog={blog} />
+    </>
   );
 }

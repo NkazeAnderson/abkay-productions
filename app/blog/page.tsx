@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+import { buildMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -11,6 +13,13 @@ function formatDate(dateString: string) {
     year: "numeric",
   });
 }
+
+export const metadata: Metadata = buildMetadata({
+  title: "Blog: Stories & Behind the Scenes",
+  description:
+    "News, artist signings and live event recaps from AB KAY Productions, including AB KAY Music artists Lexy, Mukolah and Oken.",
+  path: "/blog",
+});
 
 export default function BlogPage() {
   return (
